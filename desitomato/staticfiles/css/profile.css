@@ -1,0 +1,35 @@
+   body{
+  background:gray;
+  height: 100%;
+   margin: 0;
+   font-size: 100%;
+   position:relative;
+  }
+  .nav{
+font-size: 1.5em;
+}
+  .navbar-nav > li{
+  padding-left:15px;
+  padding-right:15px;
+}
+.navbar-nav > li{
+  margin-left:20px;
+  margin-right:20px;
+}
+  
+  @media only screen and (max-width: 900px) {
+  .navbar-nav > li{
+  padding-left:0px;
+  padding-right:0px;
+}
+.navbar-nav > li{
+  margin-left:0px;
+  margin-right:0px;
+}
+  }
+.perfo{
+	margin-top:4%;
+	margin-left:10%;
+	margin-right:10%;
+	background:white;
+}
