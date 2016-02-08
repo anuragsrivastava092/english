@@ -1,0 +1,331 @@
+{% load static %}
+
+<html>
+<head>
+<title> Desitomato </title>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}">
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Desitomato</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav navbar-right">
+		<li class="active"><a href="#">News Comprehension</a></li>
+		<li><a href="#">Vocublary</a></li>
+		<li><a href="#">Profile</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<nav class="left_side_navigation"> 
+<div class="top_10"></div>
+</nav>
+<nav class="right_side_navigation"> 
+<div class="recommendation"></div>
+</nav>
+<div class="news_article container-fluid" id="textDescription" >
+	<div class="">
+		<div class="poster_img">
+			<img src="c:/Python27/desitomato/media/None/super_large_GettyImages-466736404_kJunc4Y.jpg" alt="kii" >
+			<h1 id="test_text" >Republic Day parade:India </h1>
+			<div class="level_article"> </div>
+			<div class="save_article"></div>
+		</div>
+		<article id="longtext">
+		
+
+	<div class="objective"></div>
+	<div id="publish">Published: Times of India on 26 January 2016</div>
+	<div class="time_taken"></div>
+	<div class="main_article_content" id ="jsfiddel">
+
+	</div>
+	<div class="comment" >
+		<form role="form">
+			<div class="form-group">
+			  <label for="comment">Comment:</label>
+			  <textarea class="form-control" rows="3" id="comment"></textarea>
+			  <div class="submit">
+			  <button type="button" class="btn btn-primary btn-lg">Submit</button>
+			  </div>
+			</div>
+		</form>
+	</div>
+	<div class="button_top"></div>
+	</article>
+</div>
+
+</div>
+
+<footer> </footer>
+
+<script> 
+var lit={{list|safe}};
+var question_detail={{question|safe}};
+
+
+
+$(document).ready(function(){
+	//$("h2").on("click", "p.test", function(){
+	//$("p span").click(function(){
+	
+	$("#jsfiddel").on("click","p span",function(){
+		
+		current = this;
+		question_id = $(current).attr("id");
+		
+		
+	// finding question id
+		//var question_detail = null;
+		for (i = 0; i< question_detail.length; i++) {
+		if (question_detail[i].question_id__id.toString() === question_id) { break; }
+
+		
+	}
+		
+	//finding object
+		elem = $(current).parent();
+		
+		
+																		//<input type="hidden" name="firstname" value="vhvh">
+		var txt3 = document.createElement("p");
+		$(txt3).addClass("Current_question");
+		$(txt3).attr("id", question_id);
+		
+		var upper_end =document.createElement("div");
+		var txt9 = document.createElement("div");                                  //
+		$(txt9).addClass("glyphicon glyphicon-remove close_button");
+		upper_end.appendChild(txt9);
+		txt3.appendChild(upper_end);
+		
+		var main_question = document.createElement("p");//question ?
+		var question_text = document.createTextNode(question_detail[i].question_id__question_text);
+		main_question.appendChild(question_text);
+		txt3.appendChild(main_question);
+		
+		var form = document.createElement("form"); //form
+		$(form).attr("action", "localhost:8000/response");
+		$(form).attr("id", "profileForm");
+		$(form).attr("method", "POST"); //method
+
+		var node =document.createTextNode("{% csrf_token %}");
+		form.appendChild(node);
+		
+		var label0 = document.createElement("label");
+		var option0 = document.createElement("input");
+		$(option0).attr("type","hidden");
+		$(option0).attr("name","question_id");
+		$(option0).attr("value",question_id);
+		$(option0).attr("class","hidden_value");
+		label0.appendChild(option0)
+		form.appendChild(label0);
+				
+		
+		
+		
+		
+		
+		
+		var label1 = document.createElement("label");
+		$(label1).attr("id","choice1");
+		var option1 = document.createElement("input");
+		$(option1).attr("type","radio");
+		$(option1).attr("name","selected_choice");
+		$(option1).attr("value",1);
+		//$(option1).attr("id","choice1");
+		var option_text1_node = document.createTextNode(question_detail[i].choice1);
+		label1.appendChild(option1)
+		label1.appendChild(option_text1_node);
+		form.appendChild(label1);
+		var space1 = document.createElement("br");
+		form.appendChild(space1);		
+		
+		var label2 = document.createElement("label");
+		$(label2).attr("id","choice2");
+		var option2 = document.createElement("input");
+		$(option2).attr("type","radio");
+		$(option2).attr("name","selected_choice");
+		$(option2).attr("value",2);
+		//$(option2).attr("id","choice2");
+		var option_text2_node = document.createTextNode(question_detail[i].choice2);
+		label2.appendChild(option2)
+		label2.appendChild(option_text2_node);
+		form.appendChild(label2);
+		var space2 = document.createElement("br");
+		form.appendChild(space2);
+		
+		var label3 = document.createElement("label");
+		$(label3).attr("id","choice3");
+		var option3 = document.createElement("input");
+		$(option3).attr("type","radio");
+		$(option3).attr("name","selected_choice");
+		$(option3).attr("value",3);
+		$(option3).attr("id","choice3");
+		var option_text3_node = document.createTextNode(question_detail[i].choice3);
+		label3.appendChild(option3)
+		label3.appendChild(option_text3_node);
+		form.appendChild(label3);
+		var space3 = document.createElement("br");
+		form.appendChild(space3);
+		
+		var label4 = document.createElement("label");
+		$(label4).attr("id","choice4");
+		var option4 = document.createElement("input");
+		$(option4).attr("type","radio");
+		$(option4).attr("name","selected_choice");
+		$(option4).attr("value",4);
+		$(option4).attr("id","choice4");
+		var option_text4_node = document.createTextNode(question_detail[i].choice4);
+		label4.appendChild(option4)
+		label4.appendChild(option_text4_node);
+		form.appendChild(label4);
+		var space4 = document.createElement("br");
+		form.appendChild(space4);
+		
+		var submiss = document.createElement("button");
+		$(submiss).addClass("btn btn-primary btn-lg button_check");
+		$(submiss).attr("id","submiss_type");
+		var submit = document.createTextNode("submit");
+		submiss.appendChild(submit);
+		$(submiss).attr("type", "submit");
+		form.appendChild(submiss);
+		txt3.appendChild(form);
+		if ($( ".Current_question" ).length === 1) {
+			
+			if ($(".Current_question").attr("id")===question_id) {
+				$(".Current_question").remove();
+			}
+			else {
+				$(".Current_question").remove();
+				$(elem).after(txt3);
+				
+			}
+			}
+		else{
+			
+			$(elem).after(txt3);
+		}
+	});
+	$(document).on('click', ".close_button", function() {
+		
+		$(".Current_question").remove();
+		  
+	});
+		
+	 var aaa = ' <p class="title"><span class="comprehension" id ="comp1"> Republic Day parade: India showcases military might,French troops march in a first </span></p>  <p>NEW DELHI: India\'s military <span class="vocab" id ="hack1">prowess </span> and  \achievements  in different fields, state-of-the-art defence,diverse cultural and social traditions and the government\'s emphasis \on self-reliance dominated the showcase at New Delhi\'s Rajpath on the country\'s 67th Republic Day.</p> <p> For the first time in the history of Republic Day parades, a 123-member French Army <span class="vocab" id = "hack2"  >contingent</span> marched on  Rajpath \
+	 and present a ceremonial salute to the President Pranab Mukherjee,  as guest of honor Francois Hollande watched and clapped \
+	 seated next to Prime Minister Narendra Modi</p> <p> Another first, after a gap of 26 years, was the \
+	 march by an Army dog squad drawn from the RemountVeterinary Corps along with their \
+	 handlers.</p> <p><span class="comprehension" id ="comp2">Sticking to the 66-year-old tradition</span>, the colourful Border \
+	 Security Force regiment consisting of 56 camels also marched down the Rajpath. For the first time the \parade also witnessed an ex-servicemen tableau where army veterans showcased their role in nation building. </p> <p> Among the weapons on display were the army\'s missile <span class="grammar" id ="gram1">firing</span> capability T-90 Bhishma tank,Infantry Combat Vehicle BMP II (Sarath), Mobile Autonomous Launcher \ of the BrahMos Missile System, Akash weapon system, Smerch Launcher Vehicles and Integrated Communication Electronic Warfare System</p> <p> An <span class="comprehension" id ="comp3">Indian Air Force tableau</span>, themed \'Humanitarian Assistance and Disaster Relief \
+ Operations by IAF: \
+ In Service of the Nation and Beyond\' showcased models of C-17 Globemaster, C-130 Hercules and MI-17V5 aircraft,\
+ emphasising its use in the IAF\'s recent rescue and relief operations in Uttarakhand, Jammu and Kashmir, Yemen and Nepal.</p>\
+ <p> The Indian Navy\'s tableau displayed flight deck operations on the new aircraft carrier Vikrant,\
+ under construction at the Kochi shipyard,\
+ and the indigenously constructed submarine Kalvari by Mazagaon Dock, Mumbai, having a Made in India tag on them.</p> \
+ <p> There was a <span class="vocab" id="hack3" >scintillating</span> display of folk and classical dances and performances by school \
+ children from Delhi and other parts of India.</p> \
+ <p> One of the highlights of the two-hour event at Rajpath was the stunts by \
+ daredevils<span class="grammar" id ="gram2"> belonging</span> to the Army Signal Corps as they made various formations on motorbikes.</p> \
+ <p> The parade ended with flypasts and stunts over Rajpath by Jaguars and other aircraft, \
+  though low visibility due to fog made it difficult for thousands of cheering speactators below to enjoy the display.</p> \
+ <p> Delhi was turned into a virtual fortress as an <span class=\"vocab\" id =\"hack4\">unprecedented</span> ground-to-air security cover \
+ with thousands of armed  \
+ personnel kept a tight vigil for the Republic Day celebrations.</p> ' ;
+	
+ var html ='<p class="title"><span class="\
+  comprehension\" id ="comp1"> \
+ Republic  id kk\'s Day parade: India showcases military might, French troops march in a first </span></p>';
+ var lla = "fvgbh";
+ $("#jsfiddel").append(lit[0].content);
+
+
+ 	//$("#profileForm").submit(function (e) {
+ 		$("#jsfiddel").on("click","#submiss_type",function(e){
+ 	//	$("#jsfiddel").on("click","p span",function(){
+ 		e.preventDefault();
+ 		//alert(2);
+        //e.preventDefault();
+       // alert(2);
+       // var next=String({{next}});
+        var id = $(".hidden_value").val();
+
+        var response = $('input:radio[name=selected_choice]:checked').val();
+       //alert(response);
+        var account = { "question_id":id,
+            "selected_choice":response
+            };
+           // "next":next };
+         // alert(String(account));
+        var xhr = new XMLHttpRequest();
+        var url = "http://localhost:8000/responseapi/"; //path de api ka 
+        xhr.open("POST", url);
+        xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        //xhr.send(JSON.stringify(account));
+        xhr.send(JSON.stringify(account));
+       // xhr.send(nn);
+        xhr.onreadystatechange = function() {
+            //alert(xhr.status+","+xhr.readyState);
+             if (xhr.readyState == 4 && xhr.status == 200) {
+             	//alert(xhr.responseText);
+             	var responseText = xhr.responseText;
+			    	if (String(responseText)===String(response)){ //new
+			    		alert(222);
+						var input_id = "choice" + String(responseText);
+						//$("#" + input_id).attr("class","correctresponse");
+
+				//	$("#" + input_id)	correctresponse
+					$("#" + input_id).css("background-color", "green");
+					}
+					else {
+						alert(2);
+					var input_id = "choice" + String(responseText);
+					$("#" + input_id).css("background-color", "green");
+					var input_id = "choice" + String(response);
+					$("#" + input_id).css("background-color", "red");
+					
+				}
+             
+             	//alert(xhr.responseText);
+			 //alert("finally");
+               // var myArr = JSON.parse(xhr.responseText);
+               // alert(myArr);
+               // var redirectionUrl = myArr.url;
+                //alert(redirectionUrl);
+               // window.location.replace(redirectionUrl);
+             }
+        }
+
+
+ });
+});
+
+
+	
+
+
+
+
+
+</script>
+</body>
+</html>

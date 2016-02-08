@@ -1,0 +1,76 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<form id="profileForm" class="contact-form" role="form" method="post" novalidate="novalidate">
+<input id="hiddenForm" type="hidden" value="{{next}}"> 
+<label>Email
+<input  id="form-profile-email" type="email" name="form-profile-name" required="" aria-required="true">
+</label>
+<label>Password
+<input  id="form-profile-password" type="password" name="form-profile-name" required="" aria-required="true">
+</label>
+<label> Retype Password
+<input  id="form-profile-password1" type="password" name="form-profile-name" required="" aria-required="true">
+</label>
+<button  type="submit" id="form-submit" name="submit">Accept</button>
+</form>
+<script>
+var status={{status}}
+
+
+(function ($) {
+$("#profileForm").submit(function (e) {
+        e.preventDefault();
+        var id=1;
+       // var next=String({{next}});
+        var email = $("#form-profile-email").val();
+        var password = $("#form-profile-password").val();
+        var password1 = $("#form-profile-password1").val();
+       /// var next = $("#hiddenForm").val();
+        var nn = {"email":"k@k.k","password":"q"};      
+       /*var account = {"account":{            
+            
+           
+            "email":email,
+            "password":password,
+            "password1":password1
+        }}; */
+        var account = { "email":email,
+            "password":password,
+            "password1":password1 };
+           // "next":next };
+
+        var xhr = new XMLHttpRequest();
+        var url = "/register/"; //path de api ka 
+        xhr.open("POST", url);
+        xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",false);
+        //xhr.send(JSON.stringify(account));
+        xhr.send(JSON.stringify(account));
+       // xhr.send(nn);
+        xhr.onreadystatechange = function() {
+            //alert(xhr.status+","+xhr.readyState);
+             if (xhr.readyState == 4 && xhr.status == 200) {
+             	//alert(xhr.responseText);
+             	if (xhr.responseText ==="ll"){
+             		window.location.assign("http://localhost:8000/login/")
+             		//window.locatio
+            }
+             	//alert(xhr.responseText);
+			 //alert("finally");
+               // var myArr = JSON.parse(xhr.responseText);
+               // alert(myArr);
+               // var redirectionUrl = myArr.url;
+                //alert(redirectionUrl);
+               // window.location.replace(redirectionUrl);
+             }
+        }
+       
+    });
+
+
+})(jQuery);
+</script>
+</body>
+</html>

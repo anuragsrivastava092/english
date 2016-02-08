@@ -1,0 +1,350 @@
+{% load static %}
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+	<title> Desitomato </title>
+	<meta name="keyword" content="News">
+	<meta name="keyword" content="learn english with general knowledge">
+	<meta charset="UTF-8">
+	<meta name="hindu" content="News article">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style>
+	body {
+    
+		height: 100%;
+      }
+    .wrapper {
+      position:absolute;
+      width: 60%;
+      height: 620px;
+	  margin-top:3%;
+	  margin-left:20%;
+	  margin-right:20%;
+      
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      clear: both;
+    }
+	.table {
+	  position:absolute;
+      width: 20%;
+      height: 620px;
+	  margin-top:3%;
+	  margin-left:0%;
+	  
+      
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      clear: both;
+    }
+
+    .box {
+      float: left;
+      width: 50%;
+      height: 40%;
+      box-sizing: border-box;
+    }
+
+    .container {
+      position:absolute;
+      width: 20%;
+      height: 620px;
+	  margin-top:3%;
+	  margin-left:80%;
+	  margin-right:0%;
+	  
+      
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      clear: both;
+    }
+
+    .gauge {
+      width: 320px;
+      height: 240px;
+    }
+
+    button {
+      margin-top:80%;
+      padding: 16px 40px;
+      border-radius: 5px;
+      font-size: 18px;
+      border: none;
+      background: #34aadc;
+      color: white;
+      cursor: pointer;
+    }
+	table, th,td {
+    border: 1px solid black;
+	
+	margin-top:60%;
+	margin-left:30%;
+}
+#blue{
+background:blue;
+}
+#gray{
+background:gray;
+}
+#white{
+background:white;
+}
+#red{
+background:red;
+}
+#brown{
+background:brown;
+}
+#green{
+background:green;
+}
+
+    </style>
+  </head>
+
+  <body>
+  <nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Desitomato</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav navbar-right">
+		<li ><a href="#">News Comprehension</a></li>
+		<li><a href="#">Vocublary</a></li>
+		<li class="active"><a href="#">Profile</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="wrapper">
+      <div class="box">
+        <div id="g3" class="gauge"></div>
+      </div>
+      <div class="box">
+        <div id="g2" class="gauge"></div>
+      </div>
+      <div class="box">
+        <div id="g1" class="gauge"></div>
+      </div>
+      <div class="box">
+        <div id="g4" class="gauge"></div>
+      </div>
+    </div>
+	<div class="table"> 
+		<table >
+		  <tr>
+			<th>Range</th>
+			<th>Color</th>
+		 </tr>
+		  <tr>
+			<td>0-40</td>
+			<td id="red">Critical</td>
+		  </tr>
+		  <tr>
+			<td>41-60</td>
+			<td id="blue">Rookie</td>
+		  </tr>
+		  <tr>
+			<td>61-80</td>
+			<td id="green">Average</td>
+		  </tr>
+		  <tr>
+			<td>81-90</td>
+			<td id="brown"> Good</td>
+		  </tr>
+		  <tr>
+			<td>91-95</td>
+			<td id="gray">Excellent</td>
+		  </tr>
+		  <tr>
+			<td>96-100</td>
+			<td id="white">Unicorn</td>
+		  </tr>
+		</table>
+	</div>
+    <div class="container">
+      <button type="button" id="gauge_refresh">Show Performance</button>
+    </div>
+    <script src="{% static 'js/raphael-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/justgage.js' %}"></script>
+    <script>
+    var grammar={{grammar|safe}};
+      var vocab={{vocab|safe}};
+      var comp={{comp|safe}};
+	
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+      var g1 = new JustGage({
+        id: 'g1',
+		label: "Grammar",
+        value: 0,
+        min: 0,
+        max: 100,
+        symbol: '%',
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        customSectors: [{
+          color: 'green',
+          lo: 61,
+          hi: 80
+        }, {
+          color: 'red',
+          lo: 0,
+          hi: 40
+        }, {
+          color: 'blue',
+          lo: 41,
+          hi: 60
+        }, {
+          color: 'brown',
+          lo: 81,
+          hi: 90
+        }, {
+          color: 'gray',
+          lo: 91,
+          hi: 95
+        }, {
+          color: 'white',
+          lo: 96,
+          hi: 100
+        }],
+        counter: true
+      });
+
+      var g2 = new JustGage({
+        id: 'g2',
+        value: 0,
+		label: "Vocublary",
+        min: 0,
+        max: 100,
+        symbol: '%',
+        pointer: true,
+        gaugeWidthScale: 0.6,
+		customSectors: [{
+          color: 'green',
+          lo: 61,
+          hi: 80
+        }, {
+          color: 'red',
+          lo: 0,
+          hi: 40
+        }, {
+          color: 'blue',
+          lo: 41,
+          hi: 60
+        }, {
+          color: 'brown',
+          lo: 81,
+          hi: 90
+        }, {
+          color: 'gray',
+          lo: 91,
+          hi: 95
+        }, {
+          color: 'white',
+          lo: 96,
+          hi: 100
+        }],
+        counter: true
+      });
+
+      var g3 = new JustGage({
+        id: 'g3',
+        value: 0,
+		label: "Accuracy",
+        min: 0,
+        max: 100,
+        symbol: '%',
+        donut: true,
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        customSectors: [{
+          color: 'green',
+          lo: 61,
+          hi: 80
+        }, {
+          color: 'red',
+          lo: 0,
+          hi: 40
+        }, {
+          color: 'blue',
+          lo: 41,
+          hi: 60
+        }, {
+          color: 'brown',
+          lo: 81,
+          hi: 90
+        }, {
+          color: 'gray',
+          lo: 91,
+          hi: 95
+        }, {
+          color: 'white',
+          lo: 96,
+          hi: 100
+        }],
+        counter: true
+      });
+
+      var g4 = new JustGage({
+        id: 'g4',
+        value: 0,
+        min: 0,
+        max: 100,
+		label: "Comprehension",
+        symbol: '%',
+        pointer: true,
+        gaugeWidthScale: 0.6,
+		customSectors: [{
+          color: 'green',
+          lo: 61,
+          hi: 80
+        }, {
+          color: 'red',
+          lo: 0,
+          hi: 40
+        }, {
+          color: 'blue',
+          lo: 41,
+          hi: 60
+        }, {
+          color: 'brown',
+          lo: 81,
+          hi: 90
+        }, {
+          color: 'gray',
+          lo: 91,
+          hi: 95
+        }, {
+          color: 'white',
+          lo: 96,
+          hi: 100
+        }],
+        counter: true
+      });
+      
+
+      document.getElementById('gauge_refresh').addEventListener('click', function() {
+        g1.refresh(grammar.percentage);
+        g2.refresh(vocab.percentage);
+        g3.refresh(getRandomInt(0,99));
+        g4.refresh(comp.percentage);
+      });
+    });
+    </script>
+  </body>
+
+</html>
