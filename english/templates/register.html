@@ -1,76 +1,118 @@
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+body{
+	
+	height: 100%;
+	overflow-y: hidden;
+}
+.onscreen{
+	background:gray;
+	position:absolute;
+	
+	width:40%;
+	height:40%;
+	margin-top:15%;
+	
+	margin-left:30%;
+	margin-right:30%;
+	
+	border-radius: 1%;
+}
+.form{
+margin-left:25%;
+margin-top:5%;
+
+}
+
+
+#Register{
+margin-left:35%;
+}
+input[type=password] {
+ height:30px;
+ width:200px;
+}
+input[type=email] {
+ height:30px;
+ width:200px;
+}
+</style>
 </head>
-<body>
-<form id="profileForm" class="contact-form" role="form" method="post" novalidate="novalidate">
-<input id="hiddenForm" type="hidden" value="{{next}}"> 
-<label>Email
-<input  id="form-profile-email" type="email" name="form-profile-name" required="" aria-required="true">
-</label>
-<label>Password
-<input  id="form-profile-password" type="password" name="form-profile-name" required="" aria-required="true">
-</label>
-<label> Retype Password
-<input  id="form-profile-password1" type="password" name="form-profile-name" required="" aria-required="true">
-</label>
-<button  type="submit" id="form-submit" name="submit">Accept</button>
-</form>
+<body background="back.png">
+<div class="onscreen" id ="login"> 
+<form class="form">
+  Email:<br>
+  <input type="email" name="Email"><br>
+  
+Password:<br> 
+  <input type="password" name="password"><br> 
+ Retype Password:<br> 
+  <input type="password" name="password">
+  <input type="submit" class="btn btn-primary btn-lg" value="Create">
+</form >
+<button  type="submit" id="Register" class="btn btn-primary btn-lg" name="submit">Login</button>
+</div>
 <script>
-var status={{status}}
-
-
-(function ($) {
-$("#profileForm").submit(function (e) {
-        e.preventDefault();
-        var id=1;
-       // var next=String({{next}});
-        var email = $("#form-profile-email").val();
-        var password = $("#form-profile-password").val();
-        var password1 = $("#form-profile-password1").val();
-       /// var next = $("#hiddenForm").val();
-        var nn = {"email":"k@k.k","password":"q"};      
-       /*var account = {"account":{            
-            
-           
-            "email":email,
-            "password":password,
-            "password1":password1
-        }}; */
-        var account = { "email":email,
-            "password":password,
-            "password1":password1 };
-           // "next":next };
-
-        var xhr = new XMLHttpRequest();
-        var url = "/register/"; //path de api ka 
-        xhr.open("POST", url);
-        xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",false);
-        //xhr.send(JSON.stringify(account));
-        xhr.send(JSON.stringify(account));
-       // xhr.send(nn);
-        xhr.onreadystatechange = function() {
-            //alert(xhr.status+","+xhr.readyState);
-             if (xhr.readyState == 4 && xhr.status == 200) {
-             	//alert(xhr.responseText);
-             	if (xhr.responseText ==="ll"){
-             		window.location.assign("http://localhost:8000/login/")
-             		//window.locatio
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
-             	//alert(xhr.responseText);
-			 //alert("finally");
-               // var myArr = JSON.parse(xhr.responseText);
-               // alert(myArr);
-               // var redirectionUrl = myArr.url;
-                //alert(redirectionUrl);
-               // window.location.replace(redirectionUrl);
-             }
         }
-       
+    }
+    return cookieValue;
+}
+var csrftok = getCookie('csrftoken');
+var kkk = document.getElementById("test_csrf");
+$(kkk).attr("value",csrftok);
+
+$('form').submit(function(event) {
+
+
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var formData = {
+        	//'csrftoken' : $('input[name=csrfmiddlewaretoken]').val(),
+            'Email'              : $('input[name=Email]').val(),
+            'password'             : $('input[name=password]').val()
+            
+        };
+
+        // process the form
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            url         : 'http://localhost:8000/register/', // the url where we want to POST
+            data        : formData, // our data object
+            //dataType    : 'json', // what type of data do we expect back from the server
+                        encode          : true
+        })
+            // using the done promise callback
+            .done(function(data) {
+
+                // log data to the console so we can see
+                console.log(data); 
+
+                // here we will handle errors and validation messages
+            });
+
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
     });
-
-
-})(jQuery);
 </script>
 </body>
 </html>

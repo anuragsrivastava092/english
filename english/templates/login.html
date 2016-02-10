@@ -10,16 +10,17 @@
  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <style>
 body{
-	background:gray;
+	
 	height: 100%;
 	overflow-y: hidden;
 }
 .onscreen{
+	background:gray;
 	position:absolute;
-	background:white;
+	
 	width:40%;
 	height:40%;
-	margin-top:10%;
+	margin-top:15%;
 	
 	margin-left:30%;
 	margin-right:30%;
@@ -38,9 +39,20 @@ margin-top:5%;
 .offscreen{
 display: none;
 }
+#Register{
+margin-left:35%;
+}
+input[type=password] {
+ height:30px;
+ width:200px;
+}
+input[type=email] {
+ height:30px;
+ width:200px;
+}
 </style>
 </head>
-<body>
+<body background="back.png">
 <div class="onscreen" id ="login"> 
 <form class="form">
   Email:<br>
@@ -48,28 +60,10 @@ display: none;
   
 Password:<br> 
   <input type="password" name="password">
-  <input type="submit" value="Submit">
+  <input type="submit" class="btn btn-primary btn-lg" value="Submit">
 </form >
-
+<button  type="submit" id="Register" class="btn btn-primary btn-lg" name="submit">Register</button>
 </div>
-
-
-
-<div class="offscreen" id="signup"> 
-<form role="form">
-<input  id="test_csrf" type="hidden" name="csrfmiddlewaretoken" value="" />
-	Email:<br>
-  <input type="email" name="email"><br>
-  Enter password:<br>
-  <input type="password" name="password1"><br>
-  
-confirm password:<br> 
-  <input type="password" name="password2">
-  <input type="submit" value="Submit">
-</form>
-</div>
-
-</body>
 <script>
 function getCookie(name) {
     var cookieValue = null;
@@ -123,5 +117,5 @@ $('form').submit(function(event) {
         event.preventDefault();
     });
 </script>
-
+</body>
 </html>
