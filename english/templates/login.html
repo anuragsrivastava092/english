@@ -65,6 +65,11 @@ Password:<br>
 <button  type="submit" id="Register" class="btn btn-primary btn-lg" name="submit">Register</button>
 </div>
 <script>
+$("#Register").click(function(event){
+	event.preventDefault();
+	window.location.assign("http://google.com");
+  //  alert("The paragraph was clicked.");
+});
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

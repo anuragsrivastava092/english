@@ -34,7 +34,7 @@ margin-top:5%;
 }
 
 
-#Register{
+#Login{
 margin-left:35%;
 }
 input[type=password] {
@@ -59,9 +59,13 @@ Password:<br>
   <input type="password" name="password">
   <input type="submit" class="btn btn-primary btn-lg" value="Create">
 </form >
-<button  type="submit" id="Register" class="btn btn-primary btn-lg" name="submit">Login</button>
+<button  type="submit" id="Login" class="btn btn-primary btn-lg" name="submit">Login</button>
 </div>
 <script>
+$("#Login").click(function(){
+	window.location.assign("http://google.com"); //login page's url
+  //  alert("The paragraph was clicked.");
+});
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
