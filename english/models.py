@@ -88,6 +88,8 @@ class article(models.Model):
 		(sports,'sports'),
 		(science,'science'),(entertainment,'entertainment'),(world,'world'),(nation,'nation'),(environment,'environment'),(businessandcommerce,'businessandcommerce'),)
 	genre=models.CharField(max_length=2,choices=genre_choices,default='')
+	def __unicode__(self):
+		return str("id")+str(":")+str(self.id)+str(" ")+str("heading")+str(":")+str(self.heading)
 	
 
 
@@ -105,9 +107,6 @@ class question(models.Model):
 		(grammar,'grammar'),
 		(comp,'comprehension'),)
 	genre=models.CharField(max_length=2,choices=genre_choices)
-
-class choice(models.Model):
-	question_id=models.ForeignKey(question)
 	choice1=models.CharField(max_length=50)
 	choice2=models.CharField(max_length=50)
 	choice3=models.CharField(max_length=50)
@@ -120,12 +119,19 @@ class choice(models.Model):
 		(choice2o,'choice2'),
 		(choice3o,'choice3'),(choice4o,'choice4'),)
 	right_choice= models.CharField(max_length=2,choices=choice_choices,default='')
+	def __unicode__(self):
+		return str("id")+str(":")+str(self.id)+str(" ")+str("question_text")+str(":")+str(self.question_text)
+
+
+	
 
 class comment(models.Model):
 	article_id=models.ForeignKey(article)
 	user_id=models.ForeignKey(User)
 	comment_text=models.CharField(max_length=999)
 	time=models.DateTimeField(auto_now_add=True)
+	def __unicode__(self):
+		return str(self.id)
 
 
 class performance(models.Model):
@@ -133,15 +139,22 @@ class performance(models.Model):
 	user_id=models.ForeignKey(User)
 	response=models.CharField(max_length=2,default='')
 	key=models.BooleanField(default=False)
+	def __unicode__(self):
+		return str(self.id)
+	
 
 
 class word(models.Model):
 	word_name=models.CharField(max_length=99)
+	def __unicode__(self):
+		return str(self.id)
 
 
 class word_meaning(models.Model):
 	word_id=models.ForeignKey(word)
 	word_meaning=models.CharField(max_length=99)
+	def __unicode__(self):
+		return str(self.id)
 
 
 

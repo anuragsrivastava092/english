@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response,render,redirect
-from english.models import article,choice,User,performance,question
+from english.models import article,User,performance,question
 import json
 from django.db.models import Count
 from django.http import HttpResponse,HttpResponseRedirect
@@ -30,11 +30,26 @@ def open_article(request,articleid):
 	else:
 		listing=list(article.objects.values('image','heading','level','summary','content').filter(id=articleid))
 		listing=json.dumps(listing)
-		question_list=list(choice.objects.filter(question_id__article_id__id=articleid).values('question_id__id','question_id__question_text','choice1','choice2','choice3','choice4'))
+		question_list=list(question.objects.filter(article_id__id=articleid).values('id','question_text','choice1','choice2','choice3','choice4'))
 		question_list=json.dumps(question_list)
-		attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id'))
+
+		attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id','response','question_id2__right_choice'))
+
+
 		attempted_list=json.dumps(attempted_list)
-		return render_to_response("test.html",{'list':listing,'question':question_list,'attempt':attempted_list})
+		attempted_list=ast.literal_eval(attempted_list)
+
+		if bool(attempted_list)==False:
+			
+
+			user_time='not attempted'
+			attempted_list=json.dumps(attempted_list)
+			return render_to_response("test.html",{'user_time':user_time,'question':question_list,'list':listing})
+		else:
+			
+			user_time='attempted'
+			attempted_list=json.dumps(attempted_list)
+			return render_to_response("test.html",{'list':listing,'question':question_list,'attempt':attempted_list,'user_time':user_time,'list':listing})
 
 def load_more(request,id):
 	newarticle_list=list(article.objects.values('id','heading','level','summary').filter(id__in=[id,id-2,id-3,id-4,id-5,id-6]))
@@ -52,7 +67,7 @@ def response(request):
 		selected_choice=str(newdict['selected_choice'])
 		
 		
-		right_choice=list(choice.objects.filter(question_id__id=question_id).values('right_choice'))
+		right_choice=list(question.objects.filter(id=question_id).values('right_choice'))
 		right_choice=json.dumps(right_choice)
 		right_choice=ast.literal_eval(right_choice)
 
@@ -74,6 +89,8 @@ def performance_stats(request):
 		grammar_correct=performance.objects.filter(user_id__id=current_user,question_id2__genre=2,key=1).count()
 		grammar_total=performance.objects.filter(user_id__id=current_user,question_id2__genre=2).count()
 		grammar_percentage=0.0
+		if grammar_total==0:
+			grammar_total=2
 		grammar_percentage=(float(grammar_correct) /float(grammar_total))*100
 		grammar_list={'num_correct':grammar_correct,'num_total':grammar_total,'percentage':grammar_percentage}
 		grammar_list=json.dumps(grammar_list)
@@ -131,9 +148,20 @@ def register(request):
 		
 
 
-
+@csrf_exempt
 def login(request):
-	return render_to_response('login.html')
+	if request.method == 'POST':
+		selectedpackages = json.loads(request.body)
+		new_json = json.dumps(selectedpackages)
+		#return HttpResponse(str(new_json))
+		newdict = ast.literal_eval(new_json)
+		user = authenticate(email=str(newdict['email']), password=str(newdict['password']))
+		if user is not None:
+			django_login(request, user)
+			return HttpResponse(str("ll"))
+	else:
+		return render_to_response('login.html')
+
 
 def register2(request):
 	return render_to_response("register.html")
