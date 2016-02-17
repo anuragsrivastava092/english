@@ -1,4 +1,4 @@
 os: linux
 files:
   - source: english/views.py
-    destination: english/views.py
+    destination: /home/ubuntu/english/views.py
