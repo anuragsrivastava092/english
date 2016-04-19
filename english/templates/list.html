@@ -1,0 +1,218 @@
+<html>
+<head>
+<title> Desitomato </title>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <style>
+body{
+background:gray;
+	height: 100%;
+   margin: 0;
+   font-size: 100%;
+
+}
+.nav{
+font-size: 1.5em;
+}
+h1 {
+    font-size: 3.0em;
+}
+
+h2 {
+    font-size: 1.75em;
+	
+}
+
+p {
+    font-size: 1.25em;
+}
+
+
+.navbar-nav > li{
+  padding-left:15px;
+  padding-right:15px;
+}
+.navbar-nav > li{
+  margin-left:20px;
+  margin-right:20px;
+}
+@media only screen and (max-width: 900px) {
+  .navbar-nav > li{
+  padding-left:0px;
+  padding-right:0px;
+}
+.navbar-nav > li{
+  margin-left:0px;
+  margin-right:0px;
+}
+}
+.kkl{
+  margin-top:4%;
+  }
+
+.qq{
+margin-left:15%;
+margin-bottom:0%;
+width:35%;
+height:60%;
+float: left;
+background:blue;
+border: 1px solid gray;
+}
+.kk{
+position:relative;
+width:35%;
+height:60%;
+float: right;
+margin-right:15%;
+margin-bottom:0%;
+background:white;
+padding-left:4%;
+padding-right:4%;
+word-wrap: break-word;
+border: 1px solid gray;
+}
+.qq img {
+    width: 100%;
+	height:100%;
+}
+.publication_detail{
+	position:absolute;
+	
+	bottom:0;
+	
+	
+}
+.qq{
+cursor:pointer;
+}
+.kk >h1{
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Desitomato</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav navbar-right">
+		<li class="active"><a href="#">News Comprehension</a></li>
+		<li><a href="#">Vocublary</a></li>
+		<li><a href="#">Profile</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<script>
+$(document).ready(function(){
+var list = [{"id":"John","image":"bank.jpg","heading":"Has Fintech Boom Peaked?","level":"1","summary":"The fintech revolution is running into some resistance. Though still high by historical standards,the dollars invested in U.S. startupsfell by 20% from the third quarter to the fourth,the sharpest drop in two years."},
+	{"id":"John","image":"Doe","heading":"kk","level":"1","summary":"xcvb"}
+	];
+/*lit = (function () {
+  var json = null;
+    $.ajax({
+        'async': true,
+        'global': true,
+        'url': "http://localhost:3000/list",
+        'dataType': "json",
+        'success': function (data) {
+            json = data;
+        }
+    });
+    return json;s
+})();
+
+var lit;
+$.getJSON("http://localhost:3000/list", function(json) {
+  lit = json;
+});
+*/
+var lit = {{list|safe}};
+var xhttp = new XMLHttpRequest();
+
+xhttp.open("GET", "http://localhost:8000/homepage", true);
+xhttp.send();
+for (i=0;i<lit.length;i++){
+var first_div = document.createElement("div"); 
+	$(first_div).addClass("kkl");
+	$(first_div).attr("id", lit[i].id);
+	var second_div = document.createElement("div"); 
+	$(second_div).addClass("qq");
+	first_div.appendChild(second_div);
+	var first_image = document.createElement("img");
+	$(first_image).attr("src", lit[i].image);
+	$(first_image).attr("alt", "kkk");
+	//$(first_image).attr("onlick", "javascript:location.href='{% url 'article_url' article_id ="+lit[i].id+" }'");
+	$(first_image).attr("class", "redirect_page");
+	second_div.appendChild(first_image);
+	var third_div = document.createElement("div");
+	$(third_div).addClass("kk");
+	first_div.appendChild(third_div);
+	var heading = document.createElement("h1");
+	$(heading).text(lit[i].heading);
+	//$(heading).attr("onlick", "javascript:location.href='{% url 'article_url' article_id ="+lit[i].id+" }'");
+	$(heading).attr("class", "redirect_page");
+	third_div.appendChild(heading);
+	var summary = document.createElement("h2");
+	$(summary).text(lit[i].summary);
+	third_div.appendChild(summary);
+	$("nav").after(first_div);
+}
+/*for (i=0;i<2;i++){
+	
+	var first_div = document.createElement("div"); 
+	$(first_div).addClass("mm");
+	$(first_div).attr("id", list[0].id);
+	var second_div = document.createElement("div"); 
+	$(second_div).addClass("qq");
+	first_div.appendChild(second_div);
+	var first_image = document.createElement("img");
+	$(first_image).attr("src", "saudi.jpg");
+	$(first_image).attr("alt", "kkk");
+	//$(first_image).attr("id", "kkk");
+	$(first_image).attr("class", "redirect_page");
+	second_div.appendChild(first_image);
+	var third_div = document.createElement("div");
+	$(third_div).addClass("kk");
+	first_div.appendChild(third_div);
+	var heading = document.createElement("h1");
+	$(heading).text("Has Fintech Boom Peaked?");
+	//$(heading).attr("onlick", "javascript:location.href='{% url 'article_url' article_id =" + list[0].id +" }'");
+	$(heading).attr("class", "redirect_page");
+	third_div.appendChild(heading);
+	var summary = document.createElement("h2");
+	$(summary).text("The fintech revolution is running into some resistance. Though still high by historical standards,the dollars invested in U.S. startups fell by 20% from the third quarter to the fourth,the sharpest drop in two years.");
+	third_div.appendChild(summary);
+	$("nav").after(first_div);  
+ } */
+ $(".kkl").on("click",".redirect_page",function(){ 
+ var present = this;
+//alert(present);
+ //question_id = $(current).attr("id");
+ var present_parent = $(present).parent().parent();
+ // alert(present_parent);
+ var present_id = $(present_parent).attr("id");
+ //alert(present_id );
+ window.location.assign("http://localhost:8000/article/" + present_id +"/");
+ 
+ 
+ });
+});
+</script>
+</body>
+</html>

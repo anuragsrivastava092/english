@@ -1,0 +1,2 @@
+article=open("article.txt","r")
+return article

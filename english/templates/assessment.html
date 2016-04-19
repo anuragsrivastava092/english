@@ -1,0 +1,132 @@
+{% load static %}
+<html>
+<head>
+<title> Desitomato </title>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/test.css' %}"> -->
+<style>
+ body{
+  height: 100%;
+  
+  }
+#jsfiddel{
+margin-top:10%;
+margin-left:20%;
+
+width:60%;
+height: 60%;
+background:gray;
+}
+
+.matchoption {
+    width: 20%;
+	
+	border-radius: 2px;
+	margin-left:20%;
+     height:10%;
+    background:gray;
+	float: left;
+
+}
+.droptarget {
+  
+   border-radius: 2px;
+	margin-right:20%; 
+    width: 20%;
+   height:10%;
+    background:gray;
+    float: right;
+
+}
+.up_down{
+   float: right;
+}
+.submit{
+	margin-right:30%;
+}
+.teststart {
+ margin-left:40%;
+ margin-top:5%;
+}
+.instruction{
+margin-top:4%;
+margin-left:15%;
+margin-right:15%;
+
+color:white;
+height: 50%;
+background:black;
+
+}
+.instruction_text{
+padding-top:5%;
+padding-left:5%;
+}
+.matchoption {
+    width: 20%;
+	
+	margin-left:20%;
+     height:20%;
+    background:gray;
+	float: left;
+	border-style: solid;
+}
+.droptarget {
+   cursor:pointer;
+	margin-right:20%; 
+    width: 20%;
+   height:20%;
+    background:gray;
+    float: right;
+	border-style: solid;
+}
+.up_down{
+   float: right;
+}
+.submit{
+	margin-right:30%;
+}
+</style>
+<script src = "{% static 'js/assessment.js' %}"> </script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Desitomato</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav navbar-right">
+		<li class="active"><a href="#">News Comprehension</a></li>
+		<li><a href="#">Vocublary</a></li>
+		<li><a href="#">Profile</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id ="jsfiddel">
+<input class="teststart btn btn-primary" id ="teststart1" type="submit" value="Start test">
+<div class="instruction" id="instruction_question">
+	<p class="instruction_text"> Instruction:  </p>
+</div>
+</div>
+<script>
+   resp={{response|safe}};
+   responseText=resp[0];
+   responseOption=resp[1];
+</script>
+</body>
+</html>
