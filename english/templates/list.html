@@ -106,7 +106,7 @@ cursor:pointer;
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Desitomato</a>
+      <a class="navbar-brand" id="user_email" href="#">Desitoato</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
        <ul class="nav navbar-nav navbar-right">
@@ -120,6 +120,7 @@ cursor:pointer;
 <script>
 $(document).ready(function(){
 var email={{email|safe}};
+$("#user_email").text(email);
 var list = [{"id":"John","image":"bank.jpg","heading":"Has Fintech Boom Peaked?","level":"1","summary":"The fintech revolution is running into some resistance. Though still high by historical standards,the dollars invested in U.S. startupsfell by 20% from the third quarter to the fourth,the sharpest drop in two years."},
 	{"id":"John","image":"Doe","heading":"kk","level":"1","summary":"xcvb"}
 	];
