@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+body{
+	
+	height: 100%;
+	overflow-y: hidden;
+}
+.onscreen{
+	background:gray;
+	position:absolute;
+	
+	width:40%;
+	height:40%;
+	margin-top:15%;
+	
+	margin-left:30%;
+	margin-right:30%;
+	
+	border-radius: 1%;
+}
+.form{
+margin-left:25%;
+margin-top:10%;
+
+}
+.form_signup{
+margin-left:35%;
+margin-top:5%;
+}
+.offscreen{
+display: none;
+}
+#Register{
+margin-left:35%;
+}
+input[type=password] {
+ height:30px;
+ width:200px;
+}
+input[type=email] {
+ height:30px;
+ width:200px;
+}
+</style>
+</head>
+<body background="back.png">
+<div class="onscreen" id ="login"> 
+<form class="form">
+  Email:<br>
+  <input type="email" name="Email" id="form-profile-email"><br>
+  
+Password:<br> 
+  <input type="password" name="password" id="form-profile-password" >
+  <input type="button" class="btn btn-primary btn-lg" id="login_button" value="login">
+</form >
+
+</div>
+<script>
+$("#login_button").click(function(e) {
+        e.preventDefault();
+		alert(1);
+		
+        var email = $("#form-profile-email").val();
+         password = $("#form-profile-password").val();
+         
+	
+		
+		
+        var account = { "email":email,
+            "password":password
+             };
+           
+		
+		
+        var xhr = new XMLHttpRequest();
+        var url = "/register/"; //path de api ka 
+        xhr.open("POST", url);
+        //xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        
+        xhr.send(JSON.stringify(account));
+       alert(JSON.stringify(account));
+        xhr.onreadystatechange = function() {
+            
+             if (xhr.readyState == 4 && xhr.status == 200) {
+					alert("response");
+					responsereply = xhr.responseText;
+					if (responsereply==="1"){
+					// message box
+					alert("email not register");
+					
+					}
+					else if  (responsereply==="2"){
+					
+					window.location.assign("http://localhost:8000/review/");
+					
+					}
+					else {
+					alert("passowrd is incorrect");
+					
+					}
+					
+             	}
+			else {
+				alert("retry");
+				
+			}
+			}
+		
+		
+	});
+
+
+
+</script>
+</body>
+</html>
