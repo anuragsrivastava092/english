@@ -95,11 +95,35 @@ cursor:pointer;
 .kk >h1{
 cursor:pointer;
 }
+.btn-group {
+    z-index: 1051;
+	
+}
+	#review_test{
+	margin-left:40%;
+	}
 </style>
 </head>
 <body>
+<div id="mymodal1" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content" id="dialog-download">
+              <br><h2>Give our Customised test</h2>
+              <br>
+			  <button  type="button" id="review_test" name="submit">Test</button>
+               
+              <br>
+			  
+          </div>
+       </div>
+	</div>
+
+	   
+	  
 <nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+
   <div class="container-fluid">
+  
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
@@ -117,9 +141,19 @@ cursor:pointer;
     </div>
   </div>
 </nav>
-<script>
+<script>	
 $(document).ready(function(){
 var email="{{email|safe}}";
+var first_time_user = "{{first time suse|safe}}"
+ first_time_user =0
+	if (first_time_user === 0){
+	$("#mymodal1").modal("show");
+    // get value from ajax call here, update html and href in form.
+    $("#download_link").html("www.google.com");
+    $("#download_link").attr("href", "www.google.com");
+	
+
+	}
 $("#user_email").text(email);
 var list = [{"id":"John","image":"bank.jpg","heading":"Has Fintech Boom Peaked?","level":"1","summary":"The fintech revolution is running into some resistance. Though still high by historical standards,the dollars invested in U.S. startupsfell by 20% from the third quarter to the fourth,the sharpest drop in two years."},
 	{"id":"John","image":"Doe","heading":"kk","level":"1","summary":"xcvb"}
@@ -143,7 +177,7 @@ $.getJSON("http://localhost:3000/list", function(json) {
   lit = json;
 });
 */
-var lit = {{list|safe}};
+//var lit = {{list|safe}};
 var xhttp = new XMLHttpRequest();
 
 xhttp.open("GET", "http://localhost:8000/homepage", true);
@@ -174,33 +208,7 @@ var first_div = document.createElement("div");
 	third_div.appendChild(summary);
 	$("nav").after(first_div);
 }
-/*for (i=0;i<2;i++){
-	
-	var first_div = document.createElement("div"); 
-	$(first_div).addClass("mm");
-	$(first_div).attr("id", list[0].id);
-	var second_div = document.createElement("div"); 
-	$(second_div).addClass("qq");
-	first_div.appendChild(second_div);
-	var first_image = document.createElement("img");
-	$(first_image).attr("src", "saudi.jpg");
-	$(first_image).attr("alt", "kkk");
-	//$(first_image).attr("id", "kkk");
-	$(first_image).attr("class", "redirect_page");
-	second_div.appendChild(first_image);
-	var third_div = document.createElement("div");
-	$(third_div).addClass("kk");
-	first_div.appendChild(third_div);
-	var heading = document.createElement("h1");
-	$(heading).text("Has Fintech Boom Peaked?");
-	//$(heading).attr("onlick", "javascript:location.href='{% url 'article_url' article_id =" + list[0].id +" }'");
-	$(heading).attr("class", "redirect_page");
-	third_div.appendChild(heading);
-	var summary = document.createElement("h2");
-	$(summary).text("The fintech revolution is running into some resistance. Though still high by historical standards,the dollars invested in U.S. startups fell by 20% from the third quarter to the fourth,the sharpest drop in two years.");
-	third_div.appendChild(summary);
-	$("nav").after(first_div);  
- } */
+
  $(".kkl").on("click",".redirect_page",function(){ 
  var present = this;
 //alert(present);
@@ -213,6 +221,7 @@ var first_div = document.createElement("div");
  
  
  });
+ 
 });
 </script>
 </body>
