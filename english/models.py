@@ -9,7 +9,10 @@ from django.contrib.auth.models import UserManager
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager)
 from django.db import models
+<<<<<<< HEAD
 from multiselectfield.db.fields import MultiSelectField
+=======
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -69,11 +72,18 @@ class User(AbstractBaseUser):
 	def has_module_perms(self, app_label):
 		return True
 	def is_staff(self):
+<<<<<<< HEAD
 		return self.is_admin  
 
 
 class article(models.Model):
 	image=models.ImageField(upload_to='c:/pythondata/desitomato/media/None', height_field=None, width_field=None, max_length=100)
+=======
+		return self.is_admin   
+
+class article(models.Model):
+	image=models.ImageField(upload_to='c:/Python27/desitomato/media/None', height_field=None, width_field=None, max_length=100)
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 	heading=models.CharField(max_length=90)
 	level=models.IntegerField()
 	summary=models.TextField()
@@ -90,6 +100,7 @@ class article(models.Model):
 		(sports,'sports'),
 		(science,'science'),(entertainment,'entertainment'),(world,'world'),(nation,'nation'),(environment,'environment'),(businessandcommerce,'businessandcommerce'),)
 	genre=models.CharField(max_length=2,choices=genre_choices,default='')
+<<<<<<< HEAD
 	parsed=models.BooleanField(default=False)
 	
 	def __unicode__(self):
@@ -97,6 +108,10 @@ class article(models.Model):
 	 
 
 
+=======
+	def __unicode__(self):
+		return str("id")+str(":")+str(self.id)+str(" ")+str("heading")+str(":")+str(self.heading)
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 	
 
 
@@ -151,13 +166,19 @@ class performance(models.Model):
 	
 
 
+<<<<<<< HEAD
 class wordmeaning(models.Model):
 	word_name=models.CharField(max_length=99)
 	word_meaning=models.CharField(max_length=99)
+=======
+class word(models.Model):
+	word_name=models.CharField(max_length=99)
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 	def __unicode__(self):
 		return str(self.id)
 
 
+<<<<<<< HEAD
 class sample_question(models.Model):
 	article_id=models.ForeignKey(article)
 	question_text=models.CharField(max_length=300)
@@ -439,6 +460,13 @@ class user_essay_reviews(models.Model):
 
 
 
+=======
+class word_meaning(models.Model):
+	word_id=models.ForeignKey(word)
+	word_meaning=models.CharField(max_length=99)
+	def __unicode__(self):
+		return str(self.id)
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 
 
@@ -454,6 +482,9 @@ class user_essay_reviews(models.Model):
 
 
 
+<<<<<<< HEAD
 # Create your models here.
+=======
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 # Create your models here.

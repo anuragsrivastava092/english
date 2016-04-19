@@ -1,5 +1,9 @@
 from django.shortcuts import render_to_response,render,redirect
+<<<<<<< HEAD
 from english.models import article,User,performance,question,wordmeaning,mcq,fillblank,truefalse,morethanonechoice,sample_question,sample_performance,theory,article_visited,topic_score,verb_form,common_words,dictionary,bookmark,adjective_form
+=======
+from english.models import article,User,performance,question
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 import json
 from django.db.models import Count
 from django.http import HttpResponse,HttpResponseRedirect
@@ -11,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 import ast
 import math
+<<<<<<< HEAD
 import urllib
 from xml.dom import minidom
 import sys,codecs,locale
@@ -22,6 +27,9 @@ from english.article_ques import question_generation
 import nltk
 from nltk.corpus import wordnet as wn
 from english.anurag import anurag,final
+=======
+
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 
 
@@ -32,6 +40,7 @@ def show_article_list(request):
 	else:
 		listing=list(article.objects.values('id','image','heading','level','summary'))
 		listing=json.dumps(listing)
+<<<<<<< HEAD
 
 		return render_to_response("list.html",{'list':listing})
 
@@ -86,10 +95,15 @@ def update2(request):
 								except:
 									print "def not found"
 			
+=======
+		return render_to_response("list.html",{'list':listing})
+
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 def open_article(request,articleid):
 	if not request.user.is_authenticated():
 		return render_to_response("login.html")
 	else:
+<<<<<<< HEAD
 		parag=[]
 		if_visited=article_visited.objects.filter(user_id=request.user,article_id__id=articleid).count()
 		if if_visited==0:
@@ -296,6 +310,30 @@ def open_article(request,articleid):
 
 
 		
+=======
+		listing=list(article.objects.values('image','heading','level','summary','content').filter(id=articleid))
+		listing=json.dumps(listing)
+		question_list=list(question.objects.filter(article_id__id=articleid).values('id','question_text','choice1','choice2','choice3','choice4'))
+		question_list=json.dumps(question_list)
+
+		attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id','response','question_id2__right_choice'))
+
+
+		attempted_list=json.dumps(attempted_list)
+		attempted_list=ast.literal_eval(attempted_list)
+
+		if bool(attempted_list)==False:
+			
+
+			user_time='not attempted'
+			attempted_list=json.dumps(attempted_list)
+			return render_to_response("test.html",{'user_time':user_time,'question':question_list,'list':listing})
+		else:
+			
+			user_time='attempted'
+			attempted_list=json.dumps(attempted_list)
+			return render_to_response("test.html",{'list':listing,'question':question_list,'attempt':attempted_list,'user_time':user_time,'list':listing})
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 def load_more(request,id):
 	newarticle_list=list(article.objects.values('id','heading','level','summary').filter(id__in=[id,id-2,id-3,id-4,id-5,id-6]))
@@ -412,6 +450,7 @@ def login(request):
 def register2(request):
 	return render_to_response("register.html")
 
+<<<<<<< HEAD
 
 
 def review(request):
@@ -1156,3 +1195,6 @@ def testing(request):
 	list2=['2','3','4']
 	list3=['6','7']
 	return HttpResponse(list2)
+=======
+# Create your views here.
+>>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
