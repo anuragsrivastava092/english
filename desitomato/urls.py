@@ -17,17 +17,10 @@ Including another URLconf
 from django.conf.urls import url,patterns,include
 from django.contrib import admin
 
-<<<<<<< HEAD
-from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmark,testing
+from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmarks,testing,lookup
 urlpatterns = patterns('',
     
     url(r'^admin/', include(admin.site.urls)),
-=======
-from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more
-urlpatterns = patterns('',
-	
-	url(r'^admin/', include(admin.site.urls)),
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
     url(r'^homepage/$', show_article_list,name='show_article_list_view'),
     url(r'^article/(?P<articleid>[0-9]{1,})/$', open_article,name='article_url'),
     url(r'^responseapi/$',response),
@@ -36,7 +29,6 @@ urlpatterns = patterns('',
     url(r'^register/$',register,name='register_view'),
     url(r'^register2/$',register2,name='register_view2'),
     url(r'^loadmore/(?P<id>[0-9]{1,})/$',load_more),
-<<<<<<< HEAD
     url(r'^update2/$',update2),
     url(r'^ass/$',sample_test),
     url(r'^review/$',review),
@@ -44,23 +36,9 @@ urlpatterns = patterns('',
     url(r'^gen/$',generate_question),
     url(r'^yoyo/$',verb_forms_gen),
     url(r'^findvocab/$',findvocab),
-    url(r'^bookmark/$',bookmark),
+    url(r'^bookmark/$',bookmarks),
     url(r'^testing/$',testing),
-
-
-    
-=======
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
-
-
-    
-)
-
-
-
-
-
-<<<<<<< HEAD
+    url(r'^lookup/$',lookup),)
 
 
 
@@ -73,5 +51,6 @@ urlpatterns = patterns('',
 
 
 
-=======
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
+
+
+

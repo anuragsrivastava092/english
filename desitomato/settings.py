@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 """
 Django settings for desitomato project.
 
@@ -27,11 +24,7 @@ PROJECT_DIR = os.path.dirname(__file__)
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-<<<<<<< HEAD
 SECRET_KEY = 'hju_ughy7fe8%xluo@d#4r19uvl9vzej749i@xi_=a*yk-(%2z'
-=======
-SECRET_KEY = 'u$h2powo_%ka*jr@o&w46r4vya6zxad1h!-t5v^$+lrc5lx_q1'
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,10 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'multiselectfield',
-=======
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -151,8 +141,5 @@ AUTH_USER_MODEL = 'english.User'
 AUTHENTICATION_BACKENDS =(  'english.backends.EmailAuthBackend',
                             'django.contrib.auth.backends.ModelBackend' ,                                 )
 DAJAXICE_XMLHTTPREQUEST_JS_IMPORT = False
-<<<<<<< HEAD
 
 
-=======
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5

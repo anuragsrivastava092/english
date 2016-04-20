@@ -1,78 +1,5 @@
 <html>
 <head>
-<<<<<<< HEAD
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</head>
-<body>
-<form id="profileForm" class="contact-form" role="form" method="post" novalidate="novalidate">
-<input id="hiddenForm" type="hidden" value="{{next}}"> 
-<label>Email
-<input  id="form-profile-email" type="email" name="form-profile-name" required="" aria-required="true">
-</label>
-<label>Password
-<input  id="form-profile-password" type="password" name="form-profile-name" required="" aria-required="true">
-</label>
-<label> Retype Password
-<input  id="form-profile-password1" type="password" name="form-profile-name" required="" aria-required="true">
-</label>
-<button  type="submit" id="form-submit" name="submit">Accept</button>
-</form>
-<script>
-var status={{status}}
-
-
-(function ($) {
-$("#profileForm").submit(function (e) {
-        e.preventDefault();
-        var id=1;
-       // var next=String({{next}});
-        var email = $("#form-profile-email").val();
-        var password = $("#form-profile-password").val();
-        var password1 = $("#form-profile-password1").val();
-       /// var next = $("#hiddenForm").val();
-        var nn = {"email":"k@k.k","password":"q"};      
-       /*var account = {"account":{            
-            
-           
-            "email":email,
-            "password":password,
-            "password1":password1
-        }}; */
-        var account = { "email":email,
-            "password":password,
-            "password1":password1 };
-           // "next":next };
-
-        var xhr = new XMLHttpRequest();
-        var url = "/register/"; //path de api ka 
-        xhr.open("POST", url);
-        xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",false);
-        //xhr.send(JSON.stringify(account));
-        xhr.send(JSON.stringify(account));
-       // xhr.send(nn);
-        xhr.onreadystatechange = function() {
-            //alert(xhr.status+","+xhr.readyState);
-             if (xhr.readyState == 4 && xhr.status == 200) {
-             	//alert(xhr.responseText);
-             	if (xhr.responseText ==="ll"){
-             		window.location.assign("http://localhost:8000/login/")
-             		//window.locatio
-            }
-             	//alert(xhr.responseText);
-			 //alert("finally");
-               // var myArr = JSON.parse(xhr.responseText);
-               // alert(myArr);
-               // var redirectionUrl = myArr.url;
-                //alert(redirectionUrl);
-               // window.location.replace(redirectionUrl);
-             }
-        }
-       
-    });
-
-
-})(jQuery);
-=======
 <meta name="keyword" content="News">
 <meta name="keyword" content="learn english with general knowledge">
 <meta charset="UTF-8">
@@ -124,41 +51,20 @@ input[type=email] {
 <div class="onscreen" id ="login"> 
 <form class="form">
   Email:<br>
-  <input type="email" name="Email"><br>
+  <input type="email" name="Email" id="form-profile-email"><br>
   
 Password:<br> 
-  <input type="password" name="password"><br> 
+  <input type="password" name="password" id="form-profile-password1"><br> 
  Retype Password:<br> 
-  <input type="password" name="password">
-  <input type="submit" class="btn btn-primary btn-lg" value="Create">
+  <input type="password" name="password" id="form-profile-password2">
+  <input type="button" class="btn btn-primary btn-lg" id="create" value="Create">
 </form >
-<button  type="submit" id="Login" class="btn btn-primary btn-lg" name="submit">Login</button>
+
 </div>
 <script>
-$("#Login").click(function(){
-	window.location.assign("http://google.com"); //login page's url
-  //  alert("The paragraph was clicked.");
-});
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftok = getCookie('csrftoken');
-var kkk = document.getElementById("test_csrf");
-$(kkk).attr("value",csrftok);
 
-$('form').submit(function(event) {
+
+/* $('form').submit(function(event) {
 
 
         // get the form data
@@ -190,7 +96,73 @@ $('form').submit(function(event) {
         // stop the form from submitting the normal way and refreshing the page
         event.preventDefault();
     });
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
+	1 - email wrong
+	2 - suc
+	3 - pass
+*/	
+//$("Form").submit(function (e) {
+$("#create").click(function(e) {
+        e.preventDefault();
+		
+        var email = $("#form-profile-email").val();
+         password1 = $("#form-profile-password1").val();
+         password2 = $("#form-profile-password2").val();
+		
+		if (password1!=password2){
+		alert("password doesn't match");
+		$('#form-profile-password1').val('');
+		$('#form-profile-password2').val('');
+		}
+		else if (password1.length <5 || password1.length > 12){
+		alert("password length should between 6 to 12");
+		$('#form-profile-password1').val('');
+		$('#form-profile-password2').val('');
+		
+		}
+		
+		else{
+        var account = { "email":email,
+            "password":password1,
+            "password1":password2 };
+           
+		
+		
+        var xhr = new XMLHttpRequest();
+        var url = "/register/"; //path de api ka 
+        xhr.open("POST", url);
+        //xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        
+        xhr.send(JSON.stringify(account));
+       alert(JSON.stringify(account));
+        xhr.onreadystatechange = function() {
+            
+             if (xhr.readyState == 4 && xhr.status == 200) {
+					alert("response");
+					responsereply = xhr.responseText;
+					if (responsereply==="1"){
+					// message box
+					window.location.assign("http://localhost:8000/login/");
+					
+					}
+					else if  (responsereply==="2"){
+					alert("email already exist");
+					
+					
+					}
+					else {
+					alert("error");
+					
+					}
+					
+             	}
+			else {
+				alert("retry");
+				
+			}
+			}
+		}
+		
+	});
 </script>
 </body>
 </html>

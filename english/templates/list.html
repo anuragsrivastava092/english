@@ -144,9 +144,9 @@ cursor:pointer;
 <script>	
 $(document).ready(function(){
 var email="{{email|safe}}";
-var first_time_user = "{{first time suse|safe}}"
- first_time_user =0
-	if (first_time_user === 0){
+var first_time_user = {{bit|safe}}
+ 
+	if (first_time_user ===1 ){
 	$("#mymodal1").modal("show");
     // get value from ajax call here, update html and href in form.
     $("#download_link").html("www.google.com");
@@ -177,7 +177,7 @@ $.getJSON("http://localhost:3000/list", function(json) {
   lit = json;
 });
 */
-//var lit = {{list|safe}};
+var lit = {{list|safe}};
 var xhttp = new XMLHttpRequest();
 
 xhttp.open("GET", "http://localhost:8000/homepage", true);

@@ -125,3 +125,41 @@ position: relative;
 position: relative;
     left: 30%;
 }
+
+#tooltip {
+ background:#ff751a;
+ width:100px;
+ height:40px;
+ position:relative;
+ border-radius: 2px;
+ 
+ }
+ #tooltext{
+ padding-top:10px;
+ padding-left:10px;
+ font-size: 1.5em;
+ }
+  #tooltip_bookmark {
+ background:#ABFFE3;
+ width:100px;
+ height:40px;
+ position:relative;
+ border-radius: 2px;
+ 
+ }
+ #tooltext_bookmark{
+ padding-top:10px;
+ padding-left:10px;
+ font-size: 1.5em;
+ }
+ #popup{
+  background:gray;
+ width:400px;
+ height:400px;
+ position:relative;
+ border-radius: 2px;
+ }
+ #word_meaning{
+ padding-left:40px;
+ 
+ }

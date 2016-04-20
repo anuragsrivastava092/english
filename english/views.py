@@ -1,9 +1,5 @@
 from django.shortcuts import render_to_response,render,redirect
-<<<<<<< HEAD
 from english.models import article,User,performance,question,wordmeaning,mcq,fillblank,truefalse,morethanonechoice,sample_question,sample_performance,theory,article_visited,topic_score,verb_form,common_words,dictionary,bookmark,adjective_form
-=======
-from english.models import article,User,performance,question
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 import json
 from django.db.models import Count
 from django.http import HttpResponse,HttpResponseRedirect
@@ -15,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 import ast
 import math
-<<<<<<< HEAD
 import urllib
 from xml.dom import minidom
 import sys,codecs,locale
@@ -27,22 +22,20 @@ from english.article_ques import question_generation
 import nltk
 from nltk.corpus import wordnet as wn
 from english.anurag import anurag,final
-=======
-
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
+from english.pos import vocab
 
 
 
 # Create your views here.
-def show_article_list(request):
+def show_article_list(request,bit=0):
 	if not request.user.is_authenticated():
 		return render_to_response("login.html")
 	else:
 		listing=list(article.objects.values('id','image','heading','level','summary'))
 		listing=json.dumps(listing)
-<<<<<<< HEAD
 
-		return render_to_response("list.html",{'list':listing})
+
+		return render_to_response("list.html",{'list':listing,"email":request.user.email,"bit":bit})
 
 
 def update2(request):
@@ -54,6 +47,8 @@ def update2(request):
 	listing=ast.literal_eval(listing)
 	for i in range(len(listing)):
 		f = listing[i]['content']
+
+		#return HttpResponse(f)'''
 		for word in f.split():
 			k=word
 			usock = urllib.urlopen('http://www.dictionaryapi.com/api/v1/references/collegiate/xml/'+ word +'?key='+key2)
@@ -95,15 +90,10 @@ def update2(request):
 								except:
 									print "def not found"
 			
-=======
-		return render_to_response("list.html",{'list':listing})
-
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 def open_article(request,articleid):
 	if not request.user.is_authenticated():
 		return render_to_response("login.html")
 	else:
-<<<<<<< HEAD
 		parag=[]
 		if_visited=article_visited.objects.filter(user_id=request.user,article_id__id=articleid).count()
 		if if_visited==0:
@@ -283,8 +273,13 @@ def open_article(request,articleid):
 			add_choices=ast.literal_eval(add_choices)
 			responsejson=list()
 			responsejson2=list()
-			responsejson=json.dumps(grammar_list+add_list)
-			responsejson2=json.dumps(grammar_choices+add_choices)
+			responsejson=(grammar_list+add_list)
+			responsejson2=(grammar_choices+add_choices)
+			for i in range(len(responsejson)):
+				for j in range(i,len(responsejson2)):
+					if responsejson[i]['id']==responsejson2[j]['sample_question_id']:
+						responsejson2[j],responsejson2[i]=responsejson2[i],responsejson2[j]
+
 			#return HttpResponse(front_content)
 			return render_to_response("test.html",{'status':"not attempted",'question_list':responsejson,'choices_list':responsejson2,'content':front_content,'other_details':json.dumps(listing)})
 			#?return render_to_response("test.html",{'content':"<p>ghhhhghghghg</p>"})
@@ -301,7 +296,7 @@ def open_article(request,articleid):
 			grammar_attempted_choices=list(mcq.objects.filter(sample_question_id__id__in=new_list).values('sample_question_id','choice1','choice2','choice3','choice4','right_choice'))
 			grammar_attempted_choices=json.dumps(grammar_attempted_choices)
 
-			return render_to_response("test.html",{'status':"attempted",'question_list':json.dumps(attempted_grammar_list),'choices_list':grammar_attempted_choices,'content':parag,'other_details':json.dumps(listing)})
+			return render_to_response("test.html",{'status':"attempted",'question_list':json.dumps(attempted_grammar_list),'choices_list':grammar_attempted_choices,'content':parag,'other_details':json.dumps(listing),"email":request.user.email})
 
 			
 
@@ -310,30 +305,6 @@ def open_article(request,articleid):
 
 
 		
-=======
-		listing=list(article.objects.values('image','heading','level','summary','content').filter(id=articleid))
-		listing=json.dumps(listing)
-		question_list=list(question.objects.filter(article_id__id=articleid).values('id','question_text','choice1','choice2','choice3','choice4'))
-		question_list=json.dumps(question_list)
-
-		attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id','response','question_id2__right_choice'))
-
-
-		attempted_list=json.dumps(attempted_list)
-		attempted_list=ast.literal_eval(attempted_list)
-
-		if bool(attempted_list)==False:
-			
-
-			user_time='not attempted'
-			attempted_list=json.dumps(attempted_list)
-			return render_to_response("test.html",{'user_time':user_time,'question':question_list,'list':listing})
-		else:
-			
-			user_time='attempted'
-			attempted_list=json.dumps(attempted_list)
-			return render_to_response("test.html",{'list':listing,'question':question_list,'attempt':attempted_list,'user_time':user_time,'list':listing})
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
 
 def load_more(request,id):
 	newarticle_list=list(article.objects.values('id','heading','level','summary').filter(id__in=[id,id-2,id-3,id-4,id-5,id-6]))
@@ -397,7 +368,7 @@ def performance_stats(request):
 		
 		
 		
-		return render_to_response('profile.html',{'grammar':grammar_list,'vocab':vocab_list,'comp':comp_list})
+		return render_to_response('profile.html',{'grammar':grammar_list,'vocab':vocab_list,'comp':comp_list,"email":request.user.email})
 
 
 
@@ -413,11 +384,15 @@ def register(request):
 		new_json = json.dumps(selectedpackages)
 		#return HttpResponse(str(new_json))
 		newdict = ast.literal_eval(new_json)
+		check=User.objects.filter(email=newdict['email']).count()
+		if check==0:
 		#kk = selectedpackages.account
 		#return HttpResponse(str(newdict['email']))
 
-		user = User.objects.create_user(password=str(newdict['password']),email=str(newdict['email']))
-		return HttpResponse(str("ll"))
+			user = User.objects.create_user(password=str(newdict['password']),email=str(newdict['email']))
+			return HttpResponse(str("1"))
+		else:
+			return HttpResponse(str("2"))
 		#status=2
 
 		#return render_to_response('register.html',{'status':status})
@@ -427,30 +402,44 @@ def register(request):
 		
 		#user = User.objects.create_user(password=request.GET.get('password',''),email=request.GET.get('email',''))
 	else:
-		next=str('http://localhost:8000/login/')
-		return render_to_response('register.html',{'next':next})
+		if not request.user.is_authenticated():
+			return render_to_response('register.html',{'next':next})
+		else:
+			return show_article_list(request,bit=0)
+
 		
 
 
 @csrf_exempt
 def login(request):
+
 	if request.method == 'POST':
 		selectedpackages = json.loads(request.body)
 		new_json = json.dumps(selectedpackages)
 		#return HttpResponse(str(new_json))
 		newdict = ast.literal_eval(new_json)
-		user = authenticate(email=str(newdict['email']), password=str(newdict['password']))
-		if user is not None:
-			django_login(request, user)
-			return HttpResponse(str("ll"))
+		check=User.objects.filter(email=newdict['email']).count()
+		if check==0:
+			return HttpResponse(str("1"))
+		elif check==1:
+			user = authenticate(email=str(newdict['email']), password=str(newdict['password']))
+			if user is not None:
+				django_login(request,user)
+				return HttpResponse(str("2"))
+
+		else:
+			return HttpResponse(str("3"))
 	else:
-		return render_to_response('login.html')
+		if not request.user.is_authenticated():
+			return render_to_response('login.html')
+		else:
+			return show_article_list(request,bit=0)
+
 
 
 def register2(request):
 	return render_to_response("register.html")
 
-<<<<<<< HEAD
 
 
 def review(request):
@@ -1074,18 +1063,15 @@ def generate_question(request):
 	news.close()
 
 
-def verb_forms_gen(request):
-	res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+'flirt')
-	soup = bs4.BeautifulSoup(res.text)
-	elems=soup.select('.definition-list')
-	string=elems[0].getText()
-
-	
-	
-	
-
-	
-	return HttpResponse(string)
+def verb_forms_gen(request,mylist):
+	for i in range(len(mylist)):
+		check=wordmeaning.objects.filter(word_name=mylist[i]).count()
+		if check==0:
+			res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+mylist[i])
+			soup = bs4.BeautifulSoup(res.text)
+			elems=soup.select('.definition-list')
+			string=elems[0].getText()
+			wordmeaning.objects.create(word_name=mylist[i],word_meaning=string)
 
 
 
@@ -1105,96 +1091,112 @@ def findvocab(request):
 		find_word=common_words.objects.filter(word_anurag=b[i]).count()
 		if find_word>0 and len(b[i])>2:
 			myvocab.append(b[i])
-			
-	for i in range(len(myvocab)):
-		find_word2=dictionary.objects.filter(word=myvocab[i]).count()
-	
-		if find_word2==0:
-			try:
-				'''res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+myvocab[i])
-				soup = bs4.BeautifulSoup(res.text)
-				elems=soup.select('.definition-list')
+	return HttpResponse(myvocab)
+	return verb_forms_gen(request,mylist=myvocab)
 
-				string=elems[0].getText()'''
-				newlist.append(myvocab[i])
-			except IndexError:
-				print ""
+			
+	
 				#pk=dictionary.objects.create(word_meaning=string)
 				#url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+myvocab[i]+"/"+"json"
 				#response = urllib.urlopen(url)
 				#data = json.loads(response.read())
+		
+	'''question2=[[] for i in range(3)]
+	newlist=myvocab		#syn=synonyms.objects.create(word_id=pk,synonym_def="jj")
+	for i in range(3):
+		num=random.randint(0,len(newlist))
+		word=newlist[num]
+		question2[i].insert(0,word)
 
-				#syn=synonyms.objects.create(word_id=pk,synonym_def="jj")
-	num=random.randint(0,len(newlist))
-	word=newlist[num]
-
-	'''meaning=list(dictionary.objects.filter(word=word).values('word','word_meaning'))
-	meaning=json.dumps(meaning)
-	meaning=ast.literal_eval(meaning)
-	#meaning=meaning[0]['word_meaning']'''
-	url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+word+"/"+"json"
-	response = urllib.urlopen(url)
-	data = json.loads(response.read())
-	similar=list()
-	antonym=list()
-	choice=list()
-	try:
-		similar=data['verb']['sim']
-	except KeyError:
-		print " "
-	try:
-		similar=data['adjective']['sim']
-	except KeyError:
-		print " "
-	try:
-		similar=data['noun']['sim']
-	except KeyError:
-		print " "
-	try:
-		antonym=data['verb']['ant']
-	except KeyError:
-		print " "
-	try:
-		antonym=data['adjective']['ant']
-	except KeyError:
-		print " "
-	try:
-		antonym=data['noun']['ant']
-	except KeyError:
-		print " "
-	if len(similar)>0:
-		for i in range(len(similar)):
-			choice.append(similar[i])
-	if len(antonym)>0:
-		for i in range(len(antonym)):
-			choice.append(antonym[i])
-	for i in range(len(wn.synsets(word)[0].hypernyms())):
+		
+		url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+word+"/"+"json"
+		response = urllib.urlopen(url)
+		data = json.loads(response.read())
+		similar=list()
+		antonym=list()
+		choice=list()
+		try:
+			similar=data['verb']['sim']
+		except KeyError:
+			print " "
+		try:
+			similar=data['adjective']['sim']
+		except KeyError:
+			print " "
+		try:
+			similar=data['noun']['sim']
+		except KeyError:
+			print " "
+		try:
+			antonym=data['verb']['ant']
+		except KeyError:
+			print " "
+		try:
+			antonym=data['adjective']['ant']
+		except KeyError:
+			print " "
+		try:
+			antonym=data['noun']['ant']
+		except KeyError:
+			print " "
+		if len(similar)>0:
+			for i in range(len(similar)):
+				choice.append(similar[i])
+		if len(antonym)>0:
+			for i in range(len(antonym)):
+				choice.append(antonym[i])
+		for i in range(len(wn.synsets(word)[0].hypernyms())):
+				try:
+					choice.append(wn.synsets(word)[0].hypernyms()[i].name().split('.')[0])
+				except IndexError:
+					print ""
+		for i in range(len(wn.synsets(word)[0].hyponyms())):
 			try:
-				choice.append(wn.synsets(word)[0].hypernyms()[i].name().split('.')[0])
+				choice.append(wn.synsets(word)[0].hyponyms()[i].name().split('.')[0])
 			except IndexError:
 				print ""
-	for i in range(len(wn.synsets(word)[0].hyponyms())):
-		try:
-			choice.append(wn.synsets(word)[0].hyponyms()[i].name().split('.')[0])
-		except IndexError:
-			print ""
-	if len(choice)<4:
-		for i in range(4-len(choice)):
-			choice.append(newlist[random.randint(0,len(newlist))])
-	return HttpResponse(choice[:5])
+		if len(choice)<4:
+			for i in range(4-len(choice)):
+				choice.append(newlist[random.randint(0,len(newlist))])
+			question2
+	return HttpResponse(choice[:5])'''
 
-
-def bookmark(request):
+@csrf_exempt
+def bookmarks(request):
 	if request.method=='POST':
 		selectedpackages = json.loads(request.body)
 		new_json = json.dumps(selectedpackages)
 		newdict = ast.literal_eval(new_json)
-		bookmark.objects.create(user=request.user,word_id=newdict['word'])
+		
+		kk  =  newdict['word'].strip()
+		
+		bookmark.objects.create(user=request.user,word=kk)
+	else:
+		booklist=list(bookmark.objects.filter(user=request.user).values('word_id__word_name','word_id__word_meaning'))
+		booklist=json.dumps(booklist)
+		return render_to_response("bookmark.html",{'wordlist':booklist})
 
 def testing(request):
 	list2=['2','3','4']
 	list3=['6','7']
 	return HttpResponse(list2)
-=======
-# Create your views here.
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
+@csrf_exempt
+def lookup(request):
+	if request.method=='POST':
+		selectedpackages = json.loads(request.body)
+		new_json = json.dumps(selectedpackages)
+		newdict = ast.literal_eval(new_json)
+		kk  =  newdict['word'].strip()
+		meaning=list(wordmeaning.objects.filter(word_name=kk).values('word_meaning'))
+		meaning=json.dumps(meaning)
+		meaning=ast.literal_eval(meaning)
+		meaning=meaning[0]['word_meaning']
+		meaning=meaning.split(':')
+		meaning= meaning[1].strip('\n')
+		print meaning
+		return HttpResponse(str(meaning))
+
+
+'''def logout(request):
+	django_logout(request)
+	return render_to_response("login.html")'''

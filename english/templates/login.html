@@ -1,79 +1,5 @@
 <html>
 <head>
-<<<<<<< HEAD
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</head>
-<body>
-<form id="profileForm" class="contact-form" role="form" method="post" novalidate="novalidate">
-<input id="hiddenForm" type="hidden" value="{{next}}"> 
-<label>Email
-<input  id="form-profile-email" type="email" name="form-profile-name" required="" aria-required="true">
-</label>
-<label>Password
-<input  id="form-profile-password" type="password" name="form-profile-name" required="" aria-required="true">
-</label>
-
-<button  type="submit" id="form-submit" name="submit">Accept</button>
-</form>
-<script>
-var status={{status}}
-
-
-(function ($) {
-$("#profileForm").submit(function (e) {
-        e.preventDefault();
-        var id=1;
-       // var next=String({{next}});
-        var email = $("#form-profile-email").val();
-        var password = $("#form-profile-password").val();
-       
-       /// var next = $("#hiddenForm").val();
-        var nn = {"email":"k@k.k","password":"q"};      
-       /*var account = {"account":{            
-            
-           
-            "email":email,
-            "password":password,
-            "password1":password1
-        }}; */
-        var account = { "email":email,
-            "password":password
-            };
-           // "next":next };
-
-        var xhr = new XMLHttpRequest();
-        var url = "/login/"; //path de api ka 
-        xhr.open("POST", url);
-        xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",false);
-        //xhr.send(JSON.stringify(account));
-        xhr.send(JSON.stringify(account));
-       // xhr.send(nn);
-        xhr.onreadystatechange = function() {
-            //alert(xhr.status+","+xhr.readyState);
-             if (xhr.readyState == 4 && xhr.status == 200) {
-                //alert(xhr.responseText);
-                if (xhr.responseText ==="ll"){
-                    window.location.assign("http://localhost:8000/homepage/")
-                    //window.locatio
-            }
-                //alert(xhr.responseText);
-             //alert("finally");
-               // var myArr = JSON.parse(xhr.responseText);
-               // alert(myArr);
-               // var redirectionUrl = myArr.url;
-                //alert(redirectionUrl);
-               // window.location.replace(redirectionUrl);
-             }
-        }
-       
-    });
-
-
-})(jQuery);
-</script>
-</body>
-</html>
-=======
 <meta name="keyword" content="News">
 <meta name="keyword" content="learn english with general knowledge">
 <meta charset="UTF-8">
@@ -130,72 +56,72 @@ input[type=email] {
 <div class="onscreen" id ="login"> 
 <form class="form">
   Email:<br>
-  <input type="email" name="Email"><br>
+  <input type="email" name="Email" id="form-profile-email"><br>
   
 Password:<br> 
-  <input type="password" name="password">
-  <input type="submit" class="btn btn-primary btn-lg" value="Submit">
+  <input type="password" name="password" id="form-profile-password" >
+  <input type="submit" class="btn btn-primary btn-lg" id="login_button" value="login">
 </form >
-<button  type="submit" id="Register" class="btn btn-primary btn-lg" name="submit">Register</button>
+
 </div>
 <script>
-$("#Register").click(function(event){
-	event.preventDefault();
-	window.location.assign("http://localhost:8000/register/");
-  //  alert("The paragraph was clicked.");
-});
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftok = getCookie('csrftoken');
-var kkk = document.getElementById("test_csrf");
-$(kkk).attr("value",csrftok);
-
-$('form').submit(function(event) {
-
-
-        // get the form data
-        // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = {
-        	//'csrftoken' : $('input[name=csrfmiddlewaretoken]').val(),
-            'Email'              : $('input[name=Email]').val(),
-            'password'             : $('input[name=password]').val()
+//$("#login_button").click(function(e) {
+$("form").submit(function(e) {
+        e.preventDefault();
+		alert(1);
+		
+        var email = $("#form-profile-email").val();
+         password = $("#form-profile-password").val();
+         
+	
+		
+		
+        var account = { "email":email,
+            "password":password
+             };
+           
+		
+		
+        var xhr = new XMLHttpRequest();
+        var url = "/login/"; //path de api ka 
+        xhr.open("POST", url);
+        //xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        
+        xhr.send(JSON.stringify(account));
+       alert(JSON.stringify(account));
+        xhr.onreadystatechange = function() {
             
-        };
+             if (xhr.readyState == 4 && xhr.status == 200) {
+					alert("response");
+					responsereply = xhr.responseText;
+					alert(responsereply);
+					if (responsereply==="1"){
+					// message box
+					alert("email not register");
+					
+					}
+					else if  (responsereply==="2"){
+					
+					window.location.assign("http://localhost:8000/homepage/");
+					
+					}
+					else {
+					alert("passowrd is incorrect");
+					
+					}
+					
+             	}
+			else {
+				alert("retry");
+				
+			}
+			}
+		
+		
+	});
 
-        // process the form
-        $.ajax({
-            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            url         : 'http://localhost:8000/login/', // the url where we want to POST
-            data        : formData, // our data object
-            //dataType    : 'json', // what type of data do we expect back from the server
-                        encode          : true
-        })
-            // using the done promise callback
-            .done(function(data) {
 
-                // log data to the console so we can see
-                console.log(data); 
 
-                // here we will handle errors and validation messages
-            });
-
-        // stop the form from submitting the normal way and refreshing the page
-        event.preventDefault();
-    });
 </script>
 </body>
 </html>
->>>>>>> d23dacb8a9233a959712f93c9a77eb230e4fd3f5
