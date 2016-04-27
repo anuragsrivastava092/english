@@ -333,6 +333,8 @@ class dictionary(models.Model):
 class bookmark(models.Model):
 	user=models.ForeignKey(User)
 	word=models.CharField(max_length=50)
+	word_meaning=models.CharField(max_length=3000)
+	
 
 
 class adjective_form(models.Model):
@@ -419,6 +421,15 @@ class user_essay_reviews(models.Model):
 	parameter4_text=models.CharField(max_length=300)
 	parameter4=models.IntegerField()
 	parameter5_text=models.CharField(max_length=300)
+
+
+class list1(models.Model):
+	word_name=models.CharField(max_length=50)
+	word_meaning=models.CharField(max_length=2000)
+	word_example=models.CharField(max_length=4000)
+	def __unicode__(self):
+		return self.word_name
+
 
 
 

@@ -1,0 +1,115 @@
+   body{
+  background:gray;
+  height: 100%;
+   margin: 0;
+   
+  }
+  .nav{
+font-size: 15px;
+}
+  .navbar-nav > li{
+  padding-left:15px;
+  padding-right:15px;
+}
+.navbar-nav > li{
+  margin-left:20px;
+  margin-right:20px;
+} 
+.news_article{
+	
+   background:white;
+	margin-top:0%;
+    margin-right:20%;
+    margin-left: 20%;
+	margin-bottom:0%;
+	padding-left:2%;
+	padding-right:2%;
+	
+  }
+  h2 {
+	  font-size: 15px;
+  }
+  .vocab_instruction{
+	margin-top:10%;
+  }
+  .test_text_word {
+		margin-left:30%;
+	}
+	div  .test_text_instruction  {
+		
+		
+	}
+	.vocab_list_count{
+		float: left;
+		margin-left:3%;
+		width:4%;
+	}
+	
+	.vocab_list_word{
+		float: right;
+		margin-right:3%;
+		width:90%;
+		
+		
+		
+	}
+	
+	div  .vocab_list_word  {
+		font-size: 20px;
+		
+	}
+	
+	.vocab_list_meaning{
+		float: left;
+		margin-left:7%;
+		width:90%;
+		font-family:"Comic Sans MS", cursive, sans-serif;
+		
+		
+		
+	}
+	.vocab_list_sentence{
+		float: left;
+		margin-left:7%;
+		width:90%;
+		
+		
+		
+	}
+	.vocab_list_article{
+		float: left;
+		margin-left:7%;
+		width:90%;
+		
+	}
+	
+	
+  
+  @media only screen and (max-width: 900px) {
+  .navbar-nav > li{
+  padding-left:0px;
+  padding-right:0px;
+}
+.navbar-nav > li{
+  margin-left:0px;
+  margin-right:0px;
+}
+  .news_article{
+    background:white;
+	margin-top:0%;
+    margin-right:0%;
+    margin-left: 0%;
+	margin-bottom:0%;
+	padding-left:5%;
+	padding-right:5%;
+  }
+  .vocab_inst{
+	margin-top:15%;
+  }
+  p {
+    font-size: 12px;
+}	
+	.test_text {
+		margin-left:10%;
+	}
+}

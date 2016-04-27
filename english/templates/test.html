@@ -80,16 +80,20 @@
 <div id="tooltip_bookmark" > <article id = "tooltext_bookmark"><span class="glyphicon glyphicon-th"> </span>Bookmark</article>
 </div>
 <div id="popup"> <h1 id = "word_meaning"> </h1>  <h2 id = "word_meaning_ans"> </h2></div>
-<script src= "{% static 'js/test.js' %}" > </script>
+<script src= "{% static 'js/tet.js' %}" > </script>
 <script src= "{% static 'js/dictionary.js' %}" >
 
  </script>
  <script >
  	article_content = "{{content|safe}}";
+ 	//1
  	question_content = {{question_list|safe}};
+ 	//2
  	option_content = {{choices_list|safe}};
+ 	//3
  	other_content = {{other_details|safe}};
- 	status = "{{status|safe}}";
+ 	//4
+ 	article_status = "{{status|safe}}";
 
  	 //$("#jsfiddel").append(front_content);
  </script>

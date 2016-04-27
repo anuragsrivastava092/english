@@ -14,15 +14,26 @@ body{
 	height: 100%;
 	overflow-y: hidden;
 }
+
+
+	
+	.brand_name{
+	
+	padding-top:3%;
+	margin-left:45%;
+	font-size:2.5em;
+	
+	
+	}
 .onscreen{
 	background:gray;
 	position:absolute;
 	
 	width:40%;
 	height:40%;
-	margin-top:15%;
+	margin-top:10%;
 	
-	margin-left:30%;
+	margin-left:35%;
 	margin-right:30%;
 	
 	border-radius: 1%;
@@ -32,23 +43,87 @@ margin-left:25%;
 margin-top:5%;
 
 }
+.path_login{
+	
+	margin-left:21%;
+    margin-top:5%;
+	font-size:1.5em;
+	text-decoration: underline;
+	}
 
 
-#Login{
-margin-left:35%;
-}
 input[type=password] {
- height:30px;
- width:200px;
+ height:12%;
+ width:60%;
 }
 input[type=email] {
- height:30px;
- width:200px;
+ height:12%;
+ width:60%;
 }
+ @media only screen and (max-width: 900px) {
+	
+		body{
+			width:100%;
+	
+	
+		}
+		.heading{
+			background:black;
+			margin-top:0%;
+			margin-right:0%;
+			margin-left: 0%;
+			margin-bottom:0%;
+			
+			width:100%;
+			height:15%;
+		
+		
+		}
+		.brand_name{
+			padding-top:5%;
+			margin-left:35%;
+			font-size:1.5em;
+			color:#DDE8F0;
+	
+	
+		}
+	
+		.onscreen{
+		 background:white;
+		margin-top:0%;
+		margin-right:0%;
+		margin-left: 0%;
+		margin-bottom:0%;
+		width:100%;
+		height:90%;
+
+		}
+	
+		input[type=password] {
+			height:12%;
+			width:60%;
+		}
+		input[type=email] {
+			height:12%;
+			width:60%;
+		}
+		.path_login{
+	
+			margin-left:15%;
+			margin-top:10%;
+			text-decoration: underline;
+	
+	}
+	
+}
+
 </style>
 </head>
 <body background="back.png">
-<div class="onscreen" id ="login"> 
+	<div class="heading"  id="heading_1">
+		<p class="brand_name"> Desitomato </p>
+	</div>
+<div class="onscreen" id ="register"> 
 <form class="form">
   Email:<br>
   <input type="email" name="Email" id="form-profile-email"><br>
@@ -59,7 +134,7 @@ Password:<br>
   <input type="password" name="password" id="form-profile-password2">
   <input type="button" class="btn btn-primary btn-lg" id="create" value="Create">
 </form >
-
+<div class="path_login"> <a herf=""> Click Here! If already Registered </a> </div>
 </div>
 <script>
 
@@ -141,7 +216,7 @@ $("#create").click(function(e) {
 					responsereply = xhr.responseText;
 					if (responsereply==="1"){
 					// message box
-					window.location.assign("http://localhost:8000/login/");
+					window.location.assign("http://localhost:8000/review/");
 					
 					}
 					else if  (responsereply==="2"){

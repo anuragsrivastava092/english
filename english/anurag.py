@@ -39,9 +39,9 @@ def final(question):
                 except ValueError:
                     d =0
                 
-            elif len(question[i])==2:
+            elif len(question[i])==3:
                 
-                para[question[i][1]][question[i][2]] = "<span " + "class=" + "grammar" + " " + "id="+ ">"+ para[question[i][1]][question[i][2]]+"</span>"
+                para[question[i][1]][question[i][2]] = "<span " + "class=" + "grammar" + " " + "id="+str(question[i][0])+ ">"+ para[question[i][1]][question[i][2]]+"</span>"
                 print para[question[i][1]][question[i][2]]
             else:
                 aa=99
