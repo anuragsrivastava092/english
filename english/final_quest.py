@@ -1,6 +1,6 @@
 import nltk
 from random import shuffle,randint
-import en
+#import en
 #import sys
 #reload(sys)  # Reload does the trick!
 #sys.setdefaultencoding('UTF8')
@@ -92,7 +92,7 @@ def noun_ident_ques(sent):
 # irrgular plural
 # error is possible if com_noun accur twice and at one place have non noun tag
 # 
-def sub_noun_ques(sent):
+'''def sub_noun_ques(sent):
     token = clf(sent)
     arr=[]
     inst = "Choose the correct option"
@@ -145,7 +145,7 @@ def sub_noun_ques(sent):
         ans = com_noun
         que_word = ans
         ans = option_arr.index(ans) + 1
-        return option_arr,inst_arr,ans,"sub_noun",1,que_word
+        return option_arr,inst_arr,ans,"sub_noun",1,que_word'''
         
         
 # Me, Myself, And I
@@ -351,7 +351,7 @@ def verb_aux_ques(sent):
 
  #Irregular Verbs
 # not handle 
-def verb_main_ques(sent):
+'''def verb_main_ques(sent):
     token = clf(sent)
     arr =  []
     inst = "choose the correct"
@@ -380,7 +380,7 @@ def verb_main_ques(sent):
         ans = article
         que_word = ans
         ans = option_arr.index(ans) + 1
-        return option_arr,inst_arr,ans,"verb_main",1,que_word
+        return option_arr,inst_arr,ans,"verb_main",1,que_word'''
     
 	
 	

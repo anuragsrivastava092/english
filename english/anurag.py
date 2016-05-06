@@ -31,11 +31,12 @@ def final(question):
                 sent = para[question[i][1]][question[i][2]]
                 ques_word = question[i][3]
                 le = len(ques_word)
-            	#print sent
+            	print sent
             	#print ques_word
                 try: 
                     loc = sent.index(ques_word)
                     para[question[i][1]][question[i][2]]  = sent[:loc] +  "<span " + "class=" + "grammar" + " "+"id="+str(question[i][0])+ ">"+ ques_word +"</span>" + sent[(loc+le):]
+                    print para[question[i][1]][question[i][2]]
                 except ValueError:
                     d =0
                 

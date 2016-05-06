@@ -281,6 +281,10 @@ class sample_performance(models.Model):
 	user_id=models.ForeignKey(User)
 	sample_question_id=models.ForeignKey(sample_question)
 	response=models.CharField(max_length=4)
+	article_under=models.ForeignKey(article)
+	paragraph_pos=models.IntegerField()
+	sentence_pos=models.IntegerField()
+	word=models.CharField(blank=True,max_length=301)
 
 
 class theory(models.Model):

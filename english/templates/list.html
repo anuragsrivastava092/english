@@ -181,7 +181,7 @@ $.getJSON("http://localhost:3000/list", function(json) {
 var lit = {{list|safe}};
 var xhttp = new XMLHttpRequest();
 
-xhttp.open("GET", "http://localhost:8000/homepage", true);
+xhttp.open("GET", "/homepage", true);
 xhttp.send();
 for (i=0;i<lit.length;i++){
 var first_div = document.createElement("div"); 
@@ -218,7 +218,7 @@ var first_div = document.createElement("div");
  // alert(present_parent);
  var present_id = $(present_parent).attr("id");
  //alert(present_id );
- window.location.assign("http://localhost:8000/article/" + present_id +"/");
+ window.location.assign("/article/" + present_id +"/");
  
  
  });

@@ -43,7 +43,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'multiselectfield',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # Login via Google
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'django.contrib.sites',
+
+
 ]
+SITE_ID=1
+SOCIALACCOUNT_PROVIDERS =      { 'google':
+        { 'SCOPE': ['email'],
+          'AUTH_PARAMS': { 'access_type': 'online' }
+        }}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +69,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
 
 ROOT_URLCONF = 'desitomato.urls'
 
@@ -69,6 +86,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.core.context_processors.request",
+                
             ],
         },
     },
@@ -120,6 +139,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_EMAIL_FIELD = 'email'
+LOGIN_REDIRECT_URL = "/homepage/"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -139,7 +166,8 @@ STATICFILES_DIRS = (
 
 AUTH_USER_MODEL = 'english.User'
 AUTHENTICATION_BACKENDS =(  'english.backends.EmailAuthBackend',
-                            'django.contrib.auth.backends.ModelBackend' ,                                 )
+                            'django.contrib.auth.backends.ModelBackend' , 
+                            "allauth.account.auth_backends.AuthenticationBackend",                                )
 DAJAXICE_XMLHTTPREQUEST_JS_IMPORT = False
 
 

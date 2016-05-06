@@ -87,7 +87,7 @@ def question_generation():
                                 ar.append(qt_b)
                                 print qt_b
                                 print [b_par,b_sent]
-                elif i==2:
+                elif i==299:
                         qt_a_k = final_quest.clf(art[a_par][a_sent])
                         qt_a = final_quest.sub_noun_ques(art[a_par][a_sent])
                         qt_b = final_quest.sub_noun_ques(art[b_par][b_sent])

@@ -31,7 +31,7 @@ from random import shuffle
 # Create your views here.
 def show_article_list(request,bit=0):
 	if not request.user.is_authenticated():
-		return render_to_response("login.html")
+		return render_to_response("start.html")
 	else:
 		listing=list(article.objects.values('id','image','heading','level','summary'))
 		listing=json.dumps(listing)
@@ -94,7 +94,7 @@ def update2(request):
 			
 def open_article(request,articleid):
 	if not request.user.is_authenticated():
-		return render_to_response("login.html")
+		return render_to_response("start.html")
 	else:
 		parag=[]
 
@@ -106,13 +106,21 @@ def open_article(request,articleid):
 			news= open("article.txt","w")
 			news.write(listing[0]['content'])
 			news.close()
+			topic=topic_score.objects.filter(user_id=request.user).count()
+			
+			if topic==0:
+				topic_score.objects.create(user_id=request.user,noun_score=1,pronoun_score=2,adverb_score=3,verb_score=4,adjective_score=5,conjunction_score=6,article_score=7,determiner_score=8)
 			#question_list=list(question.objects.filter(article_id__id=articleid).values('id','question_text','choice1','choice2','choice3','choice4'))
 			#question_list=json.dumps(question_list)
 			article_visited.objects.create(user_id=request.user,article_id_id=articleid)
+			#topic=topic_score.objects.filter(user_id=request.user).count
+			#if topic==0:
+				#topic_score.objects.create(user_id_id=user.id,noun_score=0,pronoun_score=0,adverb_score=0,verb_score=0,adjective_score=0,conjunction_score=0,article_score=0,determiner_score=0)
 			weak_list=list(topic_score.objects.filter(user_id=request.user).values('noun_score','pronoun_score','adjective_score','adverb_score','verb_score','determiner_score','conjunction_score'))
 			weak_list=json.dumps(weak_list)
 			weak_list=ast.literal_eval(weak_list)
 			a=sorted(weak_list[0], key=weak_list[0].__getitem__)
+			#return HttpResponse(a)
 			mydict={'noun_score':1,'pronoun_score':2,'adjective_score':3,'adverb_score':4,'verb_score':5,'conjunction_score':6,'article_score':7,'determiner_score':8}
 			for i in range(len(a)):
 				for key, value in mydict.items():
@@ -120,14 +128,17 @@ def open_article(request,articleid):
 						a[i]=value
 			
 			
+			
 			countdict=[0,0,0]
 			weak_list=list()
 			weak_list.append(a[0])
 			weak_list.append(a[1])
 			weak_list.append(a[2])
+			return HttpResponse(weak_list)
 			count_list=list(sample_question.objects.filter(article_id__id=articleid,question_type_type=2,subtopic__in=weak_list).values('subtopic'))
 			count_list=json.dumps(count_list)
 			count_list=ast.literal_eval(count_list)
+			return HttpResponse(count_list)
 			for i in range(len(count_list)):
 				if count_list[i]['subtopic']==weak_list[0]:
 					countdict[0]+=1
@@ -166,6 +177,7 @@ def open_article(request,articleid):
 
 			grammar_list=list(sample_question.objects.filter(article_id__id=articleid,question_type_type=2,subtopic__in=weak_list).annotate(id1=F('id')).exclude(tag=1).values('id1','question_text','paragraph_pos','sentence_pos').order_by('subtopic')[:6])
 			grammar_list=json.dumps(grammar_list)
+			
 			
 
 			
@@ -272,11 +284,13 @@ def open_article(request,articleid):
 				
 				another_list.append(add_list[i]['id1'])
 			wow=new_list+another_list
+			
 
-			for i in range(len(wow)):
-			
-			
-				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=wow[i],response=0)
+			for i in range(len(grammar_list)):
+				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=grammar_list[i]['id1'],paragraph_pos=grammar_list[i]['paragraph_pos'],sentence_pos=grammar_list[i]['sentence_pos'],response=0,article_under_id=articleid)
+			for i in range(len(add_list)):
+				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=add_list[i]['id1'],paragraph_pos=add_list[i]['paragraph_pos'],sentence_pos=add_list[i]['sentence_pos'],response=0,article_under_id=articleid,word=add_list[i]['word'])
+
 			grammar_choices=list(mcq.objects.filter(sample_question_id__id__in=new_list).values('sample_question_id','choice1','choice2','choice3','choice4'))
 			grammar_choices=json.dumps(grammar_choices)
 			
@@ -306,14 +320,16 @@ def open_article(request,articleid):
 			news.close()
 	   		
 	   		#attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id','question_id2__choice1','response','question_id2__right_choice','question_id2__choice2','question_id2__choice3','question_id2__choice4'))
-			attempted_grammar_list=list(sample_performance.objects.filter(user_id=request.user,sample_question_id__article_id__id=articleid,sample_question_id__tag=0).annotate(id1=F('sample_question_id__id'),paragraph_pos=F('sample_question_id__paragraph_pos'),sentence_pos=F('sample_question_id__sentence_pos'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','sentence_pos','paragraph_pos'))
+			attempted_grammar_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__tag=0).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','sentence_pos','paragraph_pos'))
 			attempted_grammar_list=json.dumps(attempted_grammar_list)
+			print attempted_grammar_list
 			
 			#attempted_grammar_list=json.loads(attempted_grammar_list)
 			attempted_grammar_list=ast.literal_eval(attempted_grammar_list)
 
-			attempted_add_list=list(sample_performance.objects.filter(user_id=request.user,sample_question_id__article_id__id=articleid,sample_question_id__tag=1).annotate(id1=F('sample_question_id__id'),paragraph_pos=F('sample_question_id__paragraph_pos'),sentence_pos=F('sample_question_id__sentence_pos'),question_text=F('sample_question_id__question_text'),word=F('sample_question_id__word')).values('id1','question_text','response','paragraph_pos','word','sentence_pos'))
+			attempted_add_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__tag=1).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','paragraph_pos','word','sentence_pos'))
 			attempted_add_list=json.dumps(attempted_add_list)
+			print attempted_add_list
 			
 			#attempted_grammar_list=json.loads(attempted_grammar_list)
 			attempted_add_list=ast.literal_eval(attempted_add_list)
@@ -365,6 +381,7 @@ def open_article(request,articleid):
 			
 			grammar_attempted_choices=list(mcq.objects.filter(sample_question_id__id__in=new_list).values('sample_question_id','choice1','choice2','choice3','choice4','right_choice'))
 			grammar_attempted_choices=json.dumps(grammar_attempted_choices)
+
 			
 			grammar_attempted_choices=ast.literal_eval(grammar_attempted_choices)
 			add_attempted_choices=list(mcq.objects.filter(sample_question_id__id__in=another_list).values('sample_question_id','choice1','choice2','choice3','choice4','right_choice'))
@@ -427,7 +444,7 @@ def response(request):
 
 def performance_stats(request):
 	if not request.user.is_authenticated():
-		return render_to_response("login.html")
+		return render_to_response("start.html")
 	else:
 		
 		current_user=request.user.id
@@ -480,22 +497,10 @@ def register(request):
 		#return HttpResponse(str(newdict['email']))
 
 			user = User.objects.create_user(password=str(newdict['password']),email=str(newdict['email']))
+			#topic_score.objects.create(user_id_id=user.id,noun_score=0,pronoun_score=0,adverb_score=0,verb_score=0,adjective_score=0,conjunction_score=0,article_score=0,determiner_score=0)
 			return HttpResponse(str("1"))
 		else:
 			return HttpResponse(str("2"))
-		#status=2
-
-		#return render_to_response('register.html',{'status':status})
-
-		
-
-		
-		#user = User.objects.create_user(password=request.GET.get('password',''),email=request.GET.get('email',''))
-	else:
-		if not request.user.is_authenticated():
-			return render_to_response('register.html',{'next':next})
-		else:
-			return show_article_list(request,bit=0)
 
 		
 
@@ -519,12 +524,6 @@ def login(request):
 
 		else:
 			return HttpResponse(str("3"))
-	else:
-		if not request.user.is_authenticated():
-			return render_to_response('login.html')
-		else:
-			return show_article_list(request,bit=0)
-
 
 
 def register2(request):
@@ -1197,7 +1196,7 @@ def findvocab(request):
 		for j in range(2):
 			#num=random.randint(0,len(newlist))
 			#word=newlist[num]
-			word="dormant"
+			word="revert"
 			question2[j].insert(0,word)
 
 			
@@ -1306,26 +1305,46 @@ def bookmarks(request):
 		meaning=list(wordmeaning.objects.filter(word_name=kk).values('word_meaning'))
 		meaning=json.dumps(meaning)
 		meaning=ast.literal_eval(meaning)
-		if len(meaning)>0:
+		exist=bookmark.objects.filter(word=kk).count()
+		if exist==0:
+			if len(meaning)>0:
 
-		
-			bookmark.objects.create(user=request.user,word=kk,word_meaning=meaning[0]['word_meaning'])
-		else:
-			res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+kk)
-			soup = bs4.BeautifulSoup(res.text)
-			elems=soup.select('.definition-list')
-			meaning=elems[0].getText()
 			
-			meaning=meaning.split(':')
-			meaning= meaning[1].strip('\n')
-			bookmark.objects.create(user=request.user,word=kk,word_meaning=meaning)
-
-		
-
+				bookmark.objects.create(user=request.user,word=kk,word_meaning=meaning[0]['word_meaning'])
+				return HttpResponse("bookmarked")
+			else:
+				res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+kk)
+				soup = bs4.BeautifulSoup(res.text)
+				elems=soup.select('.definition-list')
+				meaning=elems[0].getText()
+				
+				meaning=meaning.split(':')
+				meaning= meaning[1].strip('\n')
+				bookmark.objects.create(user=request.user,word=kk,word_meaning=meaning)
+				return HttpResponse("bookmarked")
+		else:
+			return HttpResponse("already bookmarked")
 	else:
-		booklist=list(bookmark.objects.filter(user=request.user).values('word','word_meaning'))
-		booklist=json.dumps(booklist)
-		return render_to_response("vocab.html",{'wordlist':booklist})
+		if not request.user.is_authenticated():
+			return render_to_response("start.html")
+		else:
+			if request.user.is_authenticated():
+				booklist=list(bookmark.objects.filter(user=request.user).values('word','word_meaning'))
+				booklist=json.dumps(booklist)
+				return render_to_response("vocab.html",{'wordlist':booklist})
+			else:
+				return render_to_response("start.html")
+@csrf_exempt
+def delbookmark(request):
+	if request.method=='POST':
+		selectedpackages = json.loads(request.body)
+		new_json = json.dumps(selectedpackages)
+		newdict = ast.literal_eval(new_json)
+		
+		kk  =  newdict['word'].strip()
+		bookmark.objects.filter(word=kk).delete()
+		return HttpResponse("deleted")
+
 
 def testing(request):
 	list2=['2','3','4']
@@ -1353,7 +1372,7 @@ def handler404(request):
 
 def logout(request):
 	django_logout(request)
-	return render_to_response("login.html")
+	return render_to_response("index.html")
 
 def aboutus(request):
 	return render_to_response("about.html")
@@ -1408,7 +1427,13 @@ def returndef(request,mylist):
 	print newchoicedef
 	return newchoicedef
 def hehe(request):
-	return render_to_response("a.html")
+	return render_to_response("privacy.html")
+def start(request):
+	if not request.user.is_authenticated():
+		return render_to_response("start.html")
+	else:
+
+		return show_article_list(request,bit=0)
 
 	
 	

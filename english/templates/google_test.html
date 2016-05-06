@@ -1,4 +1,3 @@
-{% load static %}
 <html>
 <head>
 <meta name="keyword" content="News">
@@ -152,14 +151,14 @@ Password:<br>
   <input type="button" class="btn btn-primary btn-lg" id="login_button" value="login">
   
 </form >
-<div class="path_register"> <a href="http://localhost:8000/register/" class="register_path"> <p> Click Here! If Not Registered </p> </div>
+<div class="path_register"> <a herf="" class="register_path"> <p> Click Here! If Not Registered </p> </div>
 
 </div>
 
 <div class="offscreen" id ="login2"> 
 	<div class="socail_login">
-	<a href="http://localhost:8000/accounts/google/login/?process=login" class="goggle_login">
-		<img src="{% static 'img/a.png' %}" alt="Google login" style="width:191px;height:46px;border:0">
+	<a href="/accounts/google/login/?process=login" class="goggle_login">
+		<img src="a.png" alt="Google login" style="width:191px;height:46px;border:0">
 	</a>
 	</div>
 
@@ -200,7 +199,7 @@ $("#login_button").click(function(e) {
 					}
 					else if  (responsereply==="2"){
 					
-					window.location.assign("http://localhost:8000/homepage/");
+					window.location.assign("/homepage/");
 					
 					}
 					else {

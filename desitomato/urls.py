@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls import url,patterns,include
 from django.contrib import admin
 
-from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmarks,testing,lookup,aboutus,index,logout,impwords,hehe
+from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmarks,testing,lookup,aboutus,index,logout,impwords,hehe,start,delbookmark
 urlpatterns = patterns('',
     
     url(r'^admin/', include(admin.site.urls)),
@@ -43,20 +43,8 @@ urlpatterns = patterns('',
     url(r'^logout/$',logout,name='logout_view'),
     url(r'^$',index),
     url(r'^do/$',impwords),
-    url(r'^haha/$',hehe),)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    url(r'^privacy/$',hehe),
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^start/$',start),
+    url(r'^deletebookmark/$',delbookmark),)

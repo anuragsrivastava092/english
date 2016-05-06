@@ -1,0 +1,315 @@
+{% load static %}
+<html>
+<head>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+body{
+	
+	height: 100%;
+	overflow-y: hidden;
+	background:black;
+}
+
+
+	
+	.brand_name{
+	
+	padding-top:3%;
+	margin-left:45%;
+	font-size:2.5em;
+	
+	
+	}
+.onscreen{
+	background:white;
+	position:absolute;
+	width:30%;
+	height:70%;
+	margin-top:3%;
+	margin-left:20%;
+}
+.offscreen{
+	background:white;
+	position:absolute;
+	width:20%;
+	height:70%;
+	margin-top:3%;
+	margin-left:50%;
+	margin-right:20%;
+	}
+.onscreen2{
+	background:white;
+	position:absolute;
+	width:25%;
+	height:50%;
+	margin-top:3%;
+	margin-left:25%;
+}
+.offscreen2{
+	background:white;
+	position:absolute;
+	width:20%;
+	height:50%;
+	margin-top:3%;
+	margin-left:50%;
+	margin-right:20%;
+}
+.heading_account{
+margin-left:8%;
+margin-top:8%;
+}
+.form{
+margin-left:8%;
+margin-top:5%;
+
+}
+.path_login{
+	
+	margin-left:8%;
+    margin-top:5%;
+	font-size:1.5em;
+	text-decoration: underline;
+	}
+
+
+input[type=password] {
+	background:#f9fcff;
+	height:13%;
+	width:80%;
+	text-align: center;
+}
+input[type=email] {
+	background:#f9fcff;
+	height:13%;
+	width:80%;
+	text-align: center;
+}
+input[type=button] {
+
+	height:13%;
+	width:80%;
+	text-align: center;
+}
+.password_hint{
+	margin-right:10%;
+}
+
+.social_login1{
+width:80%;
+margin-top:45%;
+}
+.social_login2{
+margin-top:9%;
+width:80%;
+}
+.social_login1_2{
+width:80%;
+margin-top:35%;
+}
+.social_login2_2{
+margin-top:7%;
+width:80%;
+}
+ 
+ 
+	
+}
+
+</style>
+</head>
+<body background="back.png">
+<div id ="register">
+	<div class="onscreen" > 
+		<div class="heading_account">
+			<h4> Create a Desitomato account </h4>
+			<h5> Enter your details and we will create a Dt account for you </h5>
+		</div>
+		<form class="form">
+			<input type="email" name="Email" placeholder="Enter your email" id="form-profile-email1">
+			<input type="password" name="password" placeholder="Password" id="form-profile-password1">
+			<input type="password" name="password" placeholder="Retype Password" id="form-profile-password2">
+			<div class="password_hint">
+			<h6> Tip: Protect your account. Use a mixed case alphanumeric password with special characters.</h6>
+			</div>
+			<br>
+			<input type="button" class="btn btn-primary btn-lg" id="create" value="Create An Account">
+		</form >
+		<div class="path_login" id="login_path" ><a herf=""> Click Here! If already Registered </a>
+		</div>
+	</div>
+	<div  class="offscreen"> 
+		<a  href="http://localhost:8000/accounts/google/login/?process=login" >
+			<img class="social_login1" src="{% static 'img/a.png'%}">
+		</a>
+		<br>
+		<a  href="http://localhost:8000/accounts/facebook/login/?process=login" >
+			<img class="social_login2" src="{% static 'img/fb.png'%}">
+		</a>
+	</div>
+</div>
+<div id="login">
+	<div class="onscreen2" > 
+		<div class="heading_account">
+			<h4> Signin with your Desitomato account </h4>
+			<h5> Welcome back! Enter your password to login!</h5>
+		</div>
+		<form class="form">
+			<input type="email" name="Email" placeholder="Enter your email" id="form-profile-email">
+			<input type="password" name="password" placeholder="Password" id="form-profile-password">
+			<br>
+			<br>
+			<input type="button" class="btn btn-primary btn-lg" id="login_button" value="SIGN IN">
+		</form >
+		<div class="path_login"  >  <h4 id="register_path"> Click Here! If Not Registered </h4> 
+		</div>
+	</div>
+	<div  class="offscreen2"> 
+		<a  href="http://localhost:8000/accounts/google/login/?process=login" >
+			<img class="social_login1_2" src="{% static 'img/a.png'%}">
+		</a>
+		<br>
+		<a  href="http://localhost:8000/accounts/facebook/login/?process=login" >
+			<img class="social_login2_2" src="{% static 'img/fb.png'%}">
+		</a>
+	</div>
+</div>
+<script>
+//$("#login").hide();
+$("#register").hide();
+
+//document.getElementById("register_path").addEventListener('click', function() {
+$("#register_path").click(function(e){
+		e.preventDefault();
+		$("#login").hide();
+		$("#register").show();
+});
+$("#login_path").click(function(e){
+		e.preventDefault();
+		$("#register").hide();
+		$("#login").show();
+});
+$("#create").click(function(e) {
+        e.preventDefault();
+		
+        var email = $("#form-profile-email1").val();
+         password1 = $("#form-profile-password1").val();
+         password2 = $("#form-profile-password2").val();
+		
+		if (password1!=password2){
+		alert("password doesn't match");
+		$('#form-profile-password1').val('');
+		$('#form-profile-password2').val('');
+		}
+		else if (password1.length <5 || password1.length > 12){
+		alert("password length should between 6 to 12");
+		$('#form-profile-password1').val('');
+		$('#form-profile-password2').val('');
+		
+		}
+		
+		else{
+        var account = { "email":email,
+            "password":password1,
+            "password1":password2 };
+           
+		
+		
+        var xhr = new XMLHttpRequest();
+        var url = "http://localhost:8000/register/"; //path de api ka 
+        xhr.open("POST", url);
+        //xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        
+        xhr.send(JSON.stringify(account));
+       alert(JSON.stringify(account));
+        xhr.onreadystatechange = function() {
+            
+             if (xhr.readyState == 4 && xhr.status == 200) {
+					alert("response");
+					responsereply = xhr.responseText;
+					if (responsereply==="1"){
+					// message box
+					window.location.assign("http://localhost:8000/login/");
+					
+					}
+					else if  (responsereply==="2"){
+					alert("email already exist");
+					
+					
+					}
+					else {
+					alert("error");
+					
+					}
+					
+             	}
+			else {
+				alert("retry");
+				
+			}
+			}
+		}
+		
+	});
+	
+	$("#login_button").click(function(e) {
+       // e.preventDefault();
+		alert(1);
+		
+        var email = $("#form-profile-email").val();
+        var password = $("#form-profile-password").val();
+         
+	
+		
+		
+        var account = { "email":email,
+            "password":password
+             };
+           
+		
+		
+        var xhr = new XMLHttpRequest();
+        var url = "http://localhost:8000/login/"; //path de api ka 
+        xhr.open("POST", url);
+        //xhr.setRequestHeader('Content-Type', "application/x-www-form-urlencoded",true);
+        
+        xhr.send(JSON.stringify(account));
+       alert(JSON.stringify(account));
+        xhr.onreadystatechange = function() {
+            
+             if (xhr.readyState == 4 && xhr.status == 200) {
+					alert("response");
+					responsereply = xhr.responseText;
+					if (responsereply==="1"){
+					// message box
+					alert("email not register");
+					
+					}
+					else if  (responsereply==="2"){
+					
+					window.location.assign("http://localhost:8000/homepage/");
+					
+					}
+					else {
+					alert("passowrd is incorrect");
+					
+					}
+					
+             	}
+			else {
+				alert("retry");
+				
+			}
+			}
+		
+		
+	});
+</script>
+</body>
+</html>
