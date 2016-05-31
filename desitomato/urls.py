@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls import url,patterns,include
 from django.contrib import admin
 
-from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmarks,testing,lookup,aboutus,index,logout,impwords,hehe,start,delbookmark
+from english.views import show_article_list,open_article,response,performance_stats,login,register,register2,load_more,update2,sample_test,review,tutorial,generate_question,verb_forms_gen,findvocab,bookmarks,testing,lookup,aboutus,index,logout,impwords,hehe,start,delbookmark,open_comp_article,bookmark_questions_api,testingnew
 urlpatterns = patterns('',
     
     url(r'^admin/', include(admin.site.urls)),
@@ -47,4 +47,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^start/$',start),
-    url(r'^deletebookmark/$',delbookmark),)
+    url(r'^deletebookmark/$',delbookmark),
+    url(r'^article/(?P<articleid>[0-9]{1,})/editorial/$', open_comp_article),
+    url(r'^bookvocab/$',bookmark_questions_api,{'bit':0}),
+    url(r'^testit/$',testingnew),)

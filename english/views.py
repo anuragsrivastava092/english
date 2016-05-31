@@ -1,5 +1,6 @@
+
 from django.shortcuts import render_to_response,render,redirect
-from english.models import article,User,performance,question,wordmeaning,mcq,fillblank,truefalse,morethanonechoice,sample_question,sample_performance,theory,article_visited,topic_score,verb_form,common_words,dictionary,bookmark,adjective_form,list1
+from english.models import article,User,performance,question,wordmeaning,mcq,fillblank,truefalse,morethanonechoice,sample_question,sample_performance,theory,article_visited,topic_score,verb_form,common_words,dictionary,bookmark,adjective_form,list1,bookmark_questions,bookmark_attempted
 import json
 from django.db.models import Count
 from django.http import HttpResponse,HttpResponseRedirect
@@ -33,11 +34,11 @@ def show_article_list(request,bit=0):
 	if not request.user.is_authenticated():
 		return render_to_response("start.html")
 	else:
-		listing=list(article.objects.values('id','image','heading','level','summary'))
+		listing=list(article.objects.filter(article_type=1).values('id','image','heading','level','summary'))
 		listing=json.dumps(listing)
 
 
-		return render_to_response("list.html",{'list':listing,"email":request.user.email,"bit":bit})
+		return render_to_response("list.html",{'list':listing,"email":request.user.email,'bit':bit})
 
 
 def update2(request):
@@ -74,23 +75,23 @@ def update2(request):
 								sound = soun.childNodes[0].toxml()
 								urllib.urlretrieve(music_url+sound[0]+'/'+sound,"C:/Python27/practice/regex/sound/"+sound)
 							except:
-								print "file not found"
+								pass
 								try:
 									de = entry.getElementsByTagName('def')[0]
 									dt = de.getElementsByTagName('dt')[0]
 									meaning = dt.firstChild.toxml()
 									if meaning.find("(")>-1 and meaning.find(")")>-1 :
-										print "Meaning1:" + meaning
+										#print "Meaning1:" + meaning
 										wordmeaning.objects.create(word_name=k,word_meaning=meaning)
 									elif meaning.find("(")>-1:
 										b = meaning.find("(")
-										print "Meaning2:" + meaning[:b-1]
+										#print "Meaning2:" + meaning[:b-1]
 										wordmeaning.objects.create(word_name=k,word_meaning=meaning[:b-1])
 									else:
-										print "Meaning3:" + meaning
+										#print "Meaning3:" + meaning
 										wordmeaning.objects.create(word_name=k,word_meaning=meaning)
 								except:
-									print "def not found"
+									pass
 			
 def open_article(request,articleid):
 	if not request.user.is_authenticated():
@@ -113,14 +114,10 @@ def open_article(request,articleid):
 			#question_list=list(question.objects.filter(article_id__id=articleid).values('id','question_text','choice1','choice2','choice3','choice4'))
 			#question_list=json.dumps(question_list)
 			article_visited.objects.create(user_id=request.user,article_id_id=articleid)
-			#topic=topic_score.objects.filter(user_id=request.user).count
-			#if topic==0:
-				#topic_score.objects.create(user_id_id=user.id,noun_score=0,pronoun_score=0,adverb_score=0,verb_score=0,adjective_score=0,conjunction_score=0,article_score=0,determiner_score=0)
 			weak_list=list(topic_score.objects.filter(user_id=request.user).values('noun_score','pronoun_score','adjective_score','adverb_score','verb_score','determiner_score','conjunction_score'))
 			weak_list=json.dumps(weak_list)
 			weak_list=ast.literal_eval(weak_list)
 			a=sorted(weak_list[0], key=weak_list[0].__getitem__)
-			#return HttpResponse(a)
 			mydict={'noun_score':1,'pronoun_score':2,'adjective_score':3,'adverb_score':4,'verb_score':5,'conjunction_score':6,'article_score':7,'determiner_score':8}
 			for i in range(len(a)):
 				for key, value in mydict.items():
@@ -128,17 +125,14 @@ def open_article(request,articleid):
 						a[i]=value
 			
 			
-			
 			countdict=[0,0,0]
 			weak_list=list()
 			weak_list.append(a[0])
 			weak_list.append(a[1])
 			weak_list.append(a[2])
-			return HttpResponse(weak_list)
 			count_list=list(sample_question.objects.filter(article_id__id=articleid,question_type_type=2,subtopic__in=weak_list).values('subtopic'))
 			count_list=json.dumps(count_list)
 			count_list=ast.literal_eval(count_list)
-			return HttpResponse(count_list)
 			for i in range(len(count_list)):
 				if count_list[i]['subtopic']==weak_list[0]:
 					countdict[0]+=1
@@ -197,6 +191,16 @@ def open_article(request,articleid):
 			add_list=list(sample_question.objects.filter(tag=1,subtopic__in=sup_list).annotate(id1=F('id')).exclude(article_id__id=articleid).values('id1','question_text','subtopic','paragraph_pos','sentence_pos','word').order_by('subtopic')[:len(weird_list)])
 			add_list=json.dumps(add_list)
 			add_list=ast.literal_eval(add_list)
+			vocabulary_list=list(sample_question.objects.filter(article_id__id=articleid,subtopic=9).annotate(id1=F('id')).exclude(tag=1).values('id1','question_text','word'))
+			vocabulary_list=json.dumps(vocabulary_list)
+			
+			
+
+			
+			
+
+			vocabulary_list=ast.literal_eval(vocabulary_list)
+			#print vocabulary_list
 			for i in range(len(weird_list)):
 				for j in range(i,len(add_list)):
 					if weird_list[i]['subtopic']==add_list[j]['subtopic']:
@@ -205,18 +209,19 @@ def open_article(request,articleid):
 						add_list[j]['word']=weird_list[i]['word']
 						a,b=add_list[i],add_list[j]
 						add_list[i],add_list[j]=b,a
-			for i in range(len(add_list)):
-				print str(add_list[i]['sentence_pos'])+":"+str(add_list[i]['paragraph_pos'])+add_list[i]['word']
+			#for i in range(len(add_list)):
+				
+##print str(add_list[i]['sentence_pos'])+":"+str(add_list[i]['paragraph_pos'])+add_list[i]['word']
 			
 			
 
 
 			
 			tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-			for i in range(len(add_list)):
-					print str((add_list[i]['paragraph_pos']))+" "+  str(add_list[i]['sentence_pos'])+ str(add_list[i]['word']) +str(add_list[i]['id1'])+ "\n"
-			for i in range(len(grammar_list)):
-				print str((grammar_list[i]['paragraph_pos']))+" "+  str(grammar_list[i]['sentence_pos'])+ str(grammar_list[i]['id1']) +"\n"
+			#for i in range(len(add_list)):
+					##print str((add_list[i]['paragraph_pos']))+" "+  str(add_list[i]['sentence_pos'])+ str(add_list[i]['word']) +str(add_list[i]['id1'])+ "\n"
+			#for i in range(len(grammar_list)):
+				##print str((grammar_list[i]['paragraph_pos']))+" "+  str(grammar_list[i]['sentence_pos'])+ str(grammar_list[i]['id1']) +"\n"
 
 			
 			
@@ -224,7 +229,7 @@ def open_article(request,articleid):
 			
 			#para=final()
 		 	#return HttpResponse(para)
-		 	question2=[[] for i in range(len(grammar_list+add_list))]
+		 	question2=[[] for i in range(len(grammar_list+add_list+vocabulary_list))]
 		 	#return HttpResponse(len(question2))
 			for i in range(len(grammar_list)):
 				question2[i].insert(0,grammar_list[i]['id1'])
@@ -237,7 +242,12 @@ def open_article(request,articleid):
 				question2[i].insert(1,add_list[i-len(grammar_list)]['paragraph_pos'])
 				question2[i].insert(2,add_list[i-len(grammar_list)]['sentence_pos'])
 				question2[i].insert(3,add_list[i-len(grammar_list)]['word'])
-			print question2
+
+
+			for i in range(len(grammar_list+add_list),len(grammar_list+add_list+vocabulary_list)):
+				question2[i].insert(0,vocabulary_list[i-len(grammar_list+add_list)]['id1'])
+				question2[i].insert(1,vocabulary_list[i-len(grammar_list+add_list)]['word'])
+			#print question2
 			
 
 			
@@ -256,7 +266,7 @@ def open_article(request,articleid):
 					loc = sent.index(ques_word)
 					para[question2[i][0]][question2[i][1]]  = sent[:loc] + "<span " +"id="+ ">"+ ques_word +"</span>" + sent[(loc+le):]
 				else:
-					print  para[question2[i][0]][question2[i][1]] 
+					#print  para[question2[i][0]][question2[i][1]] 
 					para[question2[i][0]][question2[i][1]] = "<span " +"id="+ ">"+ para[question2[i][0]][question2[i][1]]+"</span>"'''
 			
 			
@@ -270,12 +280,13 @@ def open_article(request,articleid):
 			front_content=""
 			for i in range(len(parag)):
 				front_content += parag[i]
-			print front_content
+			##print front_content
 			
 			
 			
 			
 			new_list=list()
+			vocab_list=list()
 			for i in range(len(grammar_list)):
 				
 				new_list.append(grammar_list[i]['id1'])
@@ -284,13 +295,17 @@ def open_article(request,articleid):
 				
 				another_list.append(add_list[i]['id1'])
 			wow=new_list+another_list
+			for i in range(len(vocabulary_list)):
+				
+				vocab_list.append(vocabulary_list[i]['id1'])
 			
 
 			for i in range(len(grammar_list)):
 				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=grammar_list[i]['id1'],paragraph_pos=grammar_list[i]['paragraph_pos'],sentence_pos=grammar_list[i]['sentence_pos'],response=0,article_under_id=articleid)
 			for i in range(len(add_list)):
 				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=add_list[i]['id1'],paragraph_pos=add_list[i]['paragraph_pos'],sentence_pos=add_list[i]['sentence_pos'],response=0,article_under_id=articleid,word=add_list[i]['word'])
-
+			for i in range(len(vocabulary_list)):
+				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=vocabulary_list[i]['id1'],response=0,article_under_id=articleid,word=vocabulary_list[i]['word'])
 			grammar_choices=list(mcq.objects.filter(sample_question_id__id__in=new_list).values('sample_question_id','choice1','choice2','choice3','choice4'))
 			grammar_choices=json.dumps(grammar_choices)
 			
@@ -298,10 +313,16 @@ def open_article(request,articleid):
 			add_choices=list(mcq.objects.filter(sample_question_id__id__in=another_list).values('sample_question_id','choice1','choice2','choice3','choice4'))
 			add_choices=json.dumps(add_choices)
 			add_choices=ast.literal_eval(add_choices)
+			vocabulary_choices=list(mcq.objects.filter(sample_question_id__id__in=vocab_list).values('sample_question_id','choice1','choice2','choice3','choice4'))
+			vocabulary_choices=json.dumps(vocabulary_choices)
+			
+			vocabulary_choices=ast.literal_eval(vocabulary_choices)
+
 			responsejson=list()
 			responsejson2=list()
-			responsejson=(grammar_list+add_list)
-			responsejson2=(grammar_choices+add_choices)
+			responsejson=(grammar_list+add_list+vocabulary_list)
+			responsejson2=(grammar_choices+add_choices+vocabulary_choices)
+			#print "hi response json is " +str(responsejson2)
 			for i in range(len(responsejson)):
 				for j in range(i,len(responsejson2)):
 					if responsejson[i]['id1']==responsejson2[j]['sample_question_id']:
@@ -320,22 +341,32 @@ def open_article(request,articleid):
 			news.close()
 	   		
 	   		#attempted_list=list(performance.objects.filter(question_id2__article_id__id=articleid,user_id__id=request.user.id).values('question_id2__id','question_id2__choice1','response','question_id2__right_choice','question_id2__choice2','question_id2__choice3','question_id2__choice4'))
-			attempted_grammar_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__tag=0).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','sentence_pos','paragraph_pos'))
+			attempted_grammar_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__tag=0).exclude(sample_question_id__subtopic=9).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','sentence_pos','paragraph_pos'))
 			attempted_grammar_list=json.dumps(attempted_grammar_list)
-			print attempted_grammar_list
+			#return HttpResponse(attempted_grammar_list)
+
+
+			##print attempted_grammar_list
 			
 			#attempted_grammar_list=json.loads(attempted_grammar_list)
 			attempted_grammar_list=ast.literal_eval(attempted_grammar_list)
 
 			attempted_add_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__tag=1).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','paragraph_pos','word','sentence_pos'))
 			attempted_add_list=json.dumps(attempted_add_list)
-			print attempted_add_list
+			##print attempted_add_list
 			
 			#attempted_grammar_list=json.loads(attempted_grammar_list)
 			attempted_add_list=ast.literal_eval(attempted_add_list)
 
+			attempted_vocabulary_list=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__subtopic=9).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text')).values('id1','question_text','response','word'))
+			attempted_vocabulary_list=json.dumps(attempted_vocabulary_list)
+			#print attempted_vocabulary_list
+			
+			#attempted_grammar_list=json.loads(attempted_grammar_list)
+			attempted_vocabulary_list=ast.literal_eval(attempted_vocabulary_list)
 
-			question2=[[] for i in range(len(attempted_grammar_list+attempted_add_list))]
+
+			question2=[[] for i in range(len(attempted_grammar_list+attempted_add_list+attempted_vocabulary_list))]
 		 	#return HttpResponse(len(question2))
 			for i in range(len(attempted_grammar_list)):
 				question2[i].insert(0,attempted_grammar_list[i]['id1'])
@@ -348,7 +379,12 @@ def open_article(request,articleid):
 				question2[i].insert(1,attempted_add_list[i-len(attempted_grammar_list)]['paragraph_pos'])
 				question2[i].insert(2,attempted_add_list[i-len(attempted_grammar_list)]['sentence_pos'])
 				question2[i].insert(3,attempted_add_list[i-len(attempted_grammar_list)]['word'])
-			print question2
+
+
+			for i in range(len(attempted_grammar_list+attempted_add_list),len(attempted_grammar_list+attempted_add_list+attempted_vocabulary_list)):
+				question2[i].insert(0,attempted_vocabulary_list[i-len(attempted_grammar_list+attempted_add_list)]['id1'])
+				question2[i].insert(1,attempted_vocabulary_list[i-len(attempted_grammar_list+attempted_add_list)]['word'])
+			##print question2
 			
 
 			
@@ -368,6 +404,7 @@ def open_article(request,articleid):
 			for i in range(len(parag)):
 				front_content += parag[i]
 			new_list=list()
+			vocab_list=list()
 
 			for i in range(len(attempted_grammar_list)):
 				
@@ -376,6 +413,10 @@ def open_article(request,articleid):
 			for i in range(len(attempted_add_list)):
 				
 				another_list.append(attempted_add_list[i]['id1'])
+
+			for i in range(len(attempted_vocabulary_list)):
+				
+				vocab_list.append(attempted_vocabulary_list[i]['id1'])
 			wow=new_list+another_list
 
 			
@@ -388,10 +429,16 @@ def open_article(request,articleid):
 			add_attempted_choices=json.dumps(add_attempted_choices)
 			add_attempted_choices=ast.literal_eval(add_attempted_choices)
 
+			vocabulary_attempted_choices=list(mcq.objects.filter(sample_question_id__id__in=vocab_list).values('sample_question_id','choice1','choice2','choice3','choice4','right_choice'))
+			vocabulary_attempted_choices=json.dumps(vocabulary_attempted_choices)
+
+			
+			vocabulary_attempted_choices=ast.literal_eval(vocabulary_attempted_choices)
+
 			responsejson=list()
 			responsejson2=list()
-			responsejson=(attempted_grammar_list+attempted_add_list)
-			responsejson2=(grammar_attempted_choices+add_attempted_choices)
+			responsejson=(attempted_grammar_list+attempted_add_list+attempted_vocabulary_list)
+			responsejson2=(grammar_attempted_choices+add_attempted_choices+vocabulary_attempted_choices)
 			for i in range(len(responsejson)):
 				for j in range(i,len(responsejson2)):
 					if responsejson[i]['id1']==responsejson2[j]['sample_question_id']:
@@ -424,23 +471,31 @@ def response(request):
 		
 		question_id=str(newdict['question_id'])
 		selected_choice=str(newdict['selected_choice'])
+		question_type=str(newdict['question_type'])
+		if question_type==1:
 		
 		
-		right_choice=list(mcq.objects.filter(sample_question_id__id=question_id).values('right_choice'))
-		right_choice=json.dumps(right_choice)
-		right_choice=ast.literal_eval(right_choice)
+			right_choice=list(mcq.objects.filter(sample_question_id__id=question_id).values('right_choice'))
+			right_choice=json.dumps(right_choice)
+			right_choice=ast.literal_eval(right_choice)
 
 		
-		if right_choice[0]['right_choice']!=selected_choice:
-			key=0
+		
+			p=sample_performance.objects.get(sample_question_id_id=question_id,user_id=current_user)
+			p.response=selected_choice
+			p.save()
 		else:
-			key=1
-		p=sample_performance.objects.get(sample_question_id_id=question_id,user_id=current_user)
-		p.response=selected_choice
-		p.save()
+			right_choice=list(bookmark_questions.objects.filter(id=question_id).values('right_choice'))
+			right_choice=json.dumps(right_choice)
+			right_choice=ast.literal_eval(right_choice)
+			bookmark_attempted.objects.create(user_id=request.user,question_id_id=question_id,response=selected_choice)
+			return bookmark_questions_api(request,bit=1)
+
+		
 	
 		
 	return HttpResponse(right_choice[0]['right_choice'])
+
 
 def performance_stats(request):
 	if not request.user.is_authenticated():
@@ -1127,6 +1182,9 @@ def generate_question(request):
 	if_parsed=list(article.objects.filter(parsed=False).values('id','content'))
 	if_parsed=json.dumps(if_parsed)
 	if_parsed=ast.literal_eval(if_parsed)
+	if_parsed_list=list()
+	for i in range(len(if_parsed)):
+		if_parsed_list.append(if_parsed[i]['id'])
 	newlist2=list()
 	
 	
@@ -1150,23 +1208,38 @@ def generate_question(request):
 
 			mcq.objects.create(sample_question_id_id=p.id,choice1=question_list[0][j][0][0],choice2=question_list[0][j][0][1],choice3=question_list[0][j][0][2],choice4=question_list[0][j][0][3],right_choice=question_list[0][j][2])
 	news.close()
+	gen_vocab_questions(request,if_parsed_list)
 
 
 def verb_forms_gen(request,mylist):
 	for i in range(len(mylist)):
-		check=wordmeaning.objects.filter(word_name=mylist[i]).count()
-		if check==0:
+		a=0
+		try:
+		
 			res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+mylist[i])
 			soup = bs4.BeautifulSoup(res.text)
 			elems=soup.select('.definition-list')
-			string=elems[0].getText()
-			wordmeaning.objects.create(word_name=mylist[i],word_meaning=string)
+			meaning=elems[0].getText()
+			
+			meaning=meaning.split(':')
+			meaning= meaning[1].strip('\n').encode('utf-8')
+			wordmeaning.objects.create(word_name=mylist[i],word_meaning=meaning)
+			
+		except IndexError:
+			a=1
 
-
-
-def findvocab(request):
+def findvocab(request,Word):
 	newlist=list()
-	if_parsed=list(article.objects.filter(parsed=False).values('id','content'))
+	newlist_array=list(bookmark.objects.exclude(word=Word).values('word'))
+	newlist_array=json.dumps(newlist_array)
+	newlist_array=ast.literal_eval(newlist_array)
+	for i in range(len(newlist_array)):
+		newlist.append(newlist_array[i]['word'])
+	#print newlist
+
+
+
+	'''if_parsed=list(article.objects.filter(parsed=False).values('id','content'))
 	if_parsed=json.dumps(if_parsed)
 
 	if_parsed=ast.literal_eval(if_parsed)
@@ -1190,109 +1263,113 @@ def findvocab(request):
 					#response = urllib.urlopen(url)
 					#data = json.loads(response.read())
 			
-		question2=[[] for j in range(2)]
 		
-		newlist=myvocab		#syn=synonyms.objects.create(word_id=pk,synonym_def="jj")
-		for j in range(2):
-			#num=random.randint(0,len(newlist))
-			#word=newlist[num]
-			word="revert"
-			question2[j].insert(0,word)
+		
+		newlist=myvocab'''
+	question2=[[] for j in range(2)]	#syn=synonyms.objects.create(word_id=pk,synonym_def="jj")
+	for j in range(1):
+		#num=random.randint(0,len(newlist))
+		#word=newlist[num]
+		word=Word
+		question2[j].insert(0,word)
+		choice=list()
+		k=list()
+		newlistnew=['soldier','patriotic','big','random','happy']
 
-			
-			url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+word+"/"+"json"
-			response = urllib.urlopen(url)
+		
+		url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+word+"/"+"json"
+		response = urllib.urlopen(url)
+		try:
 			data = json.loads(response.read())
 			similar=list()
 			antonym=list()
-			choice=list()
-			k=list()
+			
 
 			for o in range(len(wn.synsets(word)[0].hypernyms())):
 					try:
 						choice.append(wn.synsets(word)[0].hypernyms()[o].name().split('.')[0])
 					except IndexError:
-						print ""
+						pass
 			for f in range(len(wn.synsets(word)[0].hyponyms())):
 				try:
 					choice.append(wn.synsets(word)[0].hyponyms()[f].name().split('.')[0])
 				except IndexError:
-					print ""
+					pass
 			try:
 				similar=data['verb']['sim']
 			except KeyError:
-				print " "
+				pass
 			try:
 				similar=data['adjective']['sim']
 			except KeyError:
-				print " "
+				pass
 			try:
 				similar=data['noun']['sim']
 			except KeyError:
-				print " "
+				pass
 			try:
 				antonym=data['verb']['ant']
 			except KeyError:
-				print " "
+				pass
 			try:
 				antonym=data['adjective']['ant']
 			except KeyError:
-				print " "
+				pass
 			try:
 				antonym=data['noun']['ant']
 			except KeyError:
-				print " "
+				pass
 			if len(similar)>0:
 				for w in range(len(similar)):
 					choice.append(similar[w])
 			if len(antonym)>0:
 				for y in range(len(antonym)):
 					choice.append(antonym[y])
-			if len(choice)>3:
-				shuffle(choice)
-			
-				for i in range(len(choice)):
-					if '-' not in choice[i] and len(k)<3 and '_' not in choice[i]:
-						k.append(choice[i])
-			print len(choice)
-			
-			if len(choice) <3:
-				for q in range(3-len(choice)):
-					g=random.randint(0,len(newlist))
-					if newlist[g] not in newlist:
-					
-						choice.append(newlist[g])
-					else:
-						g=random.randint(0,len(newlist))
-						choice.append(newlist[g])
-				k=choice
+		except ValueError:
+			pass
+
+
+		
+		if len(choice)>3:
+			shuffle(choice)
+		
+			for i in range(len(choice)):
+				if '-' not in choice[i] and len(k)<3 and '_' not in choice[i]:
+					k.append(choice[i])
+		#print len(choice)
+		
+		if len(choice) <3:
+			for q in range(3-len(choice)):
+				choice.append(newlist[q])
+				
+			k=choice
+
+				
 
 					
+		#print "hry"+str(len(k))
+		if len(k) <3:
+			for i in range(3-len(choice)):
+				k.append(newlistnew[random.randint(0,len(newlistnew))])
+		#print len(k)
+		k.append(word)
+		shuffle(k)
+		b=0
+		for p in range(len(k)):
+			if k[p]==word:
+				b=p
+		#print "word is"+word
 
-						
-			print "hry"+str(len(k))
-			if len(k) <3:
-				for i in range(3-len(choice)):
-					k.append(newlist[random.randint(0,len(newlist))])
-			print len(k)
-			k.append(word)
-			shuffle(k)
-			b=0
-			for p in range(len(k)):
-				if k[p]==word:
-					b=p
-			print "word is"+word
+		choice1=returndef(request,k)
+		
 
-			choice1=returndef(request,k)
-			
-
-			question2[j].append(choice1[0])
-			question2[j].append(choice1[1])
-			question2[j].append(choice1[2])
-			question2[j].append(choice1[3])
-			question2[j].append(b)
-			print question2
-		return HttpResponse(question2)
+		question2[j].append(choice1[0])
+		question2[j].append(choice1[1])
+		question2[j].append(choice1[2])
+		question2[j].append(choice1[3])
+		question2[j].append(b)
+		#print question2
+	return question2
 
 @csrf_exempt
 def bookmarks(request):
@@ -1344,8 +1421,6 @@ def delbookmark(request):
 		kk  =  newdict['word'].strip()
 		bookmark.objects.filter(word=kk).delete()
 		return HttpResponse("deleted")
-
-
 def testing(request):
 	list2=['2','3','4']
 	list3=['6','7']
@@ -1363,8 +1438,9 @@ def lookup(request):
 		meaning=meaning[0]['word_meaning']
 		meaning=meaning.split(':')
 		meaning= meaning[1].strip('\n')
-		print meaning
-		return HttpResponse(str(meaning))
+		#print meaning
+		#return HttpResponse(str(meaning))
+		return 22
 
 def handler404(request):
     return render_to_response('404.html')
@@ -1395,12 +1471,13 @@ def impwords(request):
 
 def returndef(request,mylist):
 	newchoicedef=list()
-	print len(mylist)
-	print mylist
+	newlistnew=['soldier','patriotic','big','random','happy']
+	##print len(mylist)
+	##print mylist
 	for i in range(len(mylist)):
 		check=wordmeaning.objects.filter(word_name=mylist[i]).count()
 		if check==0:
-			print mylist[i]
+			##print mylist[i]
 			try:
 				res = requests.get('http://www.merriam-webster.com/dictionary'+'/'+mylist[i])
 				soup = bs4.BeautifulSoup(res.text)
@@ -1410,7 +1487,11 @@ def returndef(request,mylist):
 				meaning= meaning[1].strip('\n')
 				newchoicedef.append(meaning)
 			except IndexError:
-				newchoicedef.append("no definition fund")
+				a=random.randint(0,4)
+				b=list()
+				b.append(newlistnew[a])
+				newmeaning=returndef(request,b)
+				newchoicedef.append(newmeaning[0])
 
 		else:
 			meaning=""
@@ -1424,18 +1505,273 @@ def returndef(request,mylist):
 				newchoicedef.append(k)
 			except IndexError:
 				newchoicedef.append(meaning)
-	print newchoicedef
+	##print newchoicedef
 	return newchoicedef
 def hehe(request):
 	return render_to_response("privacy.html")
 def start(request):
+
+	if not request.user.is_authenticated():
+		#return HttpResponse("hey man")
+		return render_to_response("start.html")
+	else:
+		return show_article_list(request,bit=0)
+
+def open_comp_article(request,articleid):
 	if not request.user.is_authenticated():
 		return render_to_response("start.html")
 	else:
+		if_visited=article_visited.objects.filter(user_id=request.user,article_id__id=articleid).count()
+		lit=list(article.objects.filter(id=articleid).values('id','image','heading','summary','content','level'))
+		lit=json.dumps(lit)
+		buffer_list=list()
+		if if_visited==0:
+			
+			question_list_mcq=list(sample_question.objects.filter(article_id__id=articleid,question_type=1).annotate(id1=F('id')).values('id1','article_id__id','question_type','question_text'))
+			question_list_mcq=json.dumps(question_list_mcq)
+			question_list_mcq=ast.literal_eval(question_list_mcq)
+			for i in range(len(question_list_mcq)):
+				buffer_list.append(question_list_mcq[i]['id1'])
+			choice_list_mcq=list(mcq.objects.filter(sample_question_id__id__in=buffer_list).annotate(id1=F('sample_question_id__id')).values('id1','choice1','choice2','choice3','choice4','right_choice'))
+			choice_list_mcq=json.dumps(choice_list_mcq)
 
-		return show_article_list(request,bit=0)
-
+			question_list_more=list(sample_question.objects.filter(article_id__id=articleid,question_type=2).annotate(id1=F('id')).values('id1','article_id__id','question_type','question_text'))
+			question_list_more=json.dumps(question_list_more)
+			question_list_more=ast.literal_eval(question_list_more)
+			for i in range(len(question_list_more)):
+				buffer_list.append(question_list_more[i]['id1'])
+			choice_list_more=list(morethanonechoice.objects.filter(sample_question_id__id__in=buffer_list).annotate(id1=F('sample_question_id__id')).values('id1','choice1','choice2','choice3','choice4','right_choice'))
+			choice_list_more=json.dumps(choice_list_more)
+			#return HttpResponse(buffer_list)
+			for i in range(len(buffer_list)):
+				p=sample_performance.objects.create(user_id=request.user,sample_question_id_id=buffer_list[i],response=0,article_under_id=articleid)
+			article_visited.objects.create(user_id=request.user,article_id_id=articleid)
+			return render_to_response("editorial.html",{'mcq_questions':json.dumps(question_list_mcq),'morethanonechoice_questions':json.dumps(question_list_more),'mcq_choices':choice_list_mcq,'morethanonechoice_choices':choice_list_more,'list':lit})
+		else:
+			question_list_mcq=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__question_type=1).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text'),question_type=F('sample_question_id__question_type')).values('question_text','id1','question_type'))
+			question_list_mcq=json.dumps(question_list_mcq)
+			question_list_mcq=ast.literal_eval(question_list_mcq)
+			for i in range(len(question_list_mcq)):
+				buffer_list.append(question_list_mcq[i]['id1'])
+			choice_list_mcq=list(mcq.objects.filter(sample_question_id__id__in=buffer_list).annotate(id1=F('sample_question_id__id')).values('id1','choice1','choice2','choice3','choice4','right_choice'))
+			choice_list_mcq=json.dumps(choice_list_mcq)
+			question_list_more=list(sample_performance.objects.filter(user_id=request.user,article_under__id=articleid,sample_question_id__question_type=2).annotate(id1=F('sample_question_id__id'),question_text=F('sample_question_id__question_text'),question_type=F('sample_question_id__question_type')).values('question_text','id1','question_type'))
+			question_list_more=json.dumps(question_list_more)
+			question_list_more=ast.literal_eval(question_list_more)
+			for i in range(len(question_list_more)):
+				buffer_list.append(question_list_more[i]['id1'])
+			choice_list_more=list(morethanonechoice.objects.filter(sample_question_id__id__in=buffer_list).annotate(id1=F('sample_question_id__id')).values('id1','choice1','choice2','choice3','choice4','right_choice'))
+			choice_list_more=json.dumps(choice_list_more)
+			return render_to_response("editorial.html",{'mcq_questions':json.dumps(question_list_mcq),'morethanonechoice_questions':json.dumps(question_list_more),'mcq_choices':choice_list_mcq,'morethanonechoice_choices':choice_list_more,'list':lit})
 	
 	
+def show_editorial_list(request,bit=0):
+	if not request.user.is_authenticated():
+		return render_to_response("start.html")
+	else:
+		listing=list(article.objects.filter(article_type=2).values('id','image','heading','level','summary'))
+		listing=json.dumps(listing)
+
+
+		return render_to_response("list.html",{'list':listing,"email":request.user.email,"bit":bit})
+
+
+
+def bookmark_questions_api(request,bit):
+	word_attempted=list(bookmark_attempted.objects.filter(user_id=request.user).values('question_id__word_used__word'))
+	word_attempted=json.dumps(word_attempted)
+	word_attempted=ast.literal_eval(word_attempted)
+	word_attempted_list=list()
+	for i in range(len(word_attempted)):
+		word_attempted_list.append(word_attempted[i]['question_id__word_used__word'])
 	
 
+	word_free=list(bookmark.objects.filter(user_id=request.user).exclude(word__in=word_attempted_list).values('id','word'))
+	word_free=json.dumps(word_free)
+	
+	word_free=ast.literal_eval(word_free)
+	#print word_free
+	v=random.randint(0,(len(word_free)-1))
+	#print v 
+	word_selected=word_free[v]['word']
+	
+	question=findvocab(request,word_selected)
+	question_json={}
+	question_json['question_text']=question[0][0]
+	question_json['choice1']=question[0][1]
+	question_json['choice2']=question[0][2]
+	question_json['choice3']=question[0][3]
+	question_json['choice4']=question[0][4]
+	question_json['right_choice']=question[0][5]
+
+	k=bookmark_questions.objects.create(word_used_id=word_free[v]['id'],question_text=question_json['question_text'],choice1=question_json['choice1'],choice2=question_json['choice2'],choice3=question_json['choice3'],choice4=question_json['choice1'],right_choice=question_json['right_choice'])
+	question_json['id']=k.id
+
+	if bit==0:
+
+	
+
+	
+
+		return render_to_response("vocab_uestion.html",{'question':json.dumps(question_json)})
+	else:
+		question=question_json
+		return HttpResponse(json.dumps(question))
+
+
+def gen_vocab_questions(request,articleid):
+	newlist=list()
+	newlistnew=['soldier','patriotic','big','random','happy']
+	if_parsed=list(article.objects.filter(id__in=articleid).values('id','content'))
+	if_parsed=json.dumps(if_parsed)
+
+	if_parsed=ast.literal_eval(if_parsed)
+	myvocab=list()
+	newvocab=list()
+	
+	
+	for i in range(len(if_parsed)):
+		b=vocab(if_parsed[i]['content'])
+		
+		for h in range(len(b)):
+			find_word=common_words.objects.filter(word_anurag=b[h]).count()
+			contains_word=wordmeaning.objects.filter(word_name=b[h]).count()
+			if find_word==0 and len(b[h])>2 and contains_word==0:
+				myvocab.append(b[h])
+		
+	
+
+
+
+	
+		
+		
+		newlist=myvocab
+		
+		for l in range(2):
+			question2=list()	#syn=synonyms.objects.create(word_id=pk,synonym_def="jj")
+			num=random.randint(0,len(newlist))
+			word=newlist[num]
+			
+			question2.insert(0,word)
+			choice=list()
+			k=list()
+			
+
+			
+			url="http://words.bighugelabs.com/api/2/6315f684524176c55a924bccc603e395"+"/"+word+"/"+"json"
+			response = urllib.urlopen(url)
+			try:
+				data = json.loads(response.read())
+				similar=list()
+				antonym=list()
+				
+
+				for o in range(len(wn.synsets(word)[0].hypernyms())):
+						try:
+							choice.append(wn.synsets(word)[0].hypernyms()[o].name().split('.')[0])
+						except IndexError:
+							pass
+				for f in range(len(wn.synsets(word)[0].hyponyms())):
+					try:
+						choice.append(wn.synsets(word)[0].hyponyms()[f].name().split('.')[0])
+					except IndexError:
+						pass
+				try:
+					similar=data['verb']['sim']
+				except KeyError:
+					pass
+				try:
+					similar=data['adjective']['sim']
+				except KeyError:
+					pass
+				try:
+					similar=data['noun']['sim']
+				except KeyError:
+					pass
+				try:
+					antonym=data['verb']['ant']
+				except KeyError:
+					pass
+				try:
+					antonym=data['adjective']['ant']
+				except KeyError:
+					pass
+				try:
+					antonym=data['noun']['ant']
+				except KeyError:
+					pass
+				if len(similar)>0:
+					for w in range(len(similar)):
+						choice.append(similar[w])
+				if len(antonym)>0:
+					for y in range(len(antonym)):
+						choice.append(antonym[y])
+			except ValueError:
+				pass
+
+
+			
+			if len(choice)>3:
+				shuffle(choice)
+			
+				for q in range(len(choice)):
+					if '-' not in choice[q] and len(k)<3 and '_' not in choice[q]:
+						k.append(choice[q])
+			#print len(choice)
+			
+			if len(choice) <3:
+				for q in range(3-len(choice)):
+					choice.append(newlist[q])
+					
+				k=choice
+
+					
+
+						
+			#print "hry"+str(len(k))
+			if len(k) <3:
+				for i in range(3-len(choice)):
+					k.append(newlistnew[random.randint(0,len(newlistnew))])
+			#print len(k)
+			k.append(word)
+			shuffle(k) 
+			
+			b=0
+			for p in range(len(k)):
+				if k[p]==word:
+					b=p
+			#print "word is"+word
+
+			choice1=returndef(request,k)
+			
+
+			question2.append(choice1[0])
+			question2.append(choice1[1])
+			question2.append(choice1[2])
+			question2.append(choice1[3])
+			question2.append(b)
+			#print question2
+			##print "question_text"+str(question2[j][0])
+			##print "Word"+str(question2[j][0])
+			#print "id"+str(if_parsed[i]['id'])
+			k=sample_question.objects.create(article_id_id=if_parsed[i]['id'],question_text=question2[0],subtopic=9,level=1,question_type=1,question_type_type=2,word=question2[0],tag=0)
+			mcq.objects.create(sample_question_id_id=k.id,choice1=choice1[0],choice2=choice1[1],choice3=choice1[2],choice4=choice1[3],right_choice=b)
+	verb_forms_gen(request,mylist=myvocab)
+
+
+def testingnew(request):
+	if_parsed=list(article.objects.filter(parsed=False).values('id','content'))
+	if_parsed=json.dumps(if_parsed)
+	if_parsed=ast.literal_eval(if_parsed)
+	myvocab=list()
+	for i in range(len(if_parsed)):
+		b=vocab(if_parsed[i]['content'])
+		
+		for h in range(len(b)):
+			find_word=common_words.objects.filter(word_anurag=b[h]).count()
+			contains_word=wordmeaning.objects.filter(word_name=b[h]).count()
+			if find_word==0 and len(b[h])>2 and contains_word==0:
+				myvocab.append(b[h])
+
+	verb_forms_gen(request,mylist=myvocab)

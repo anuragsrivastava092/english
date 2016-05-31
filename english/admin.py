@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User,article,question,comment,performance,wordmeaning,sample_question,mcq,truefalse,morethanonechoice,fillblank,matchit,sample_performance,theory,topic_score,article_visited,verb_form,common_words,dictionary,bookmark,adjective_form,synonyms,similars,relateds,antonyms,essay,essay_attempted,user_essay_reviews,list1
+from .models import User,article,question,comment,performance,wordmeaning,sample_question,mcq,truefalse,morethanonechoice,fillblank,matchit,sample_performance,theory,topic_score,article_visited,verb_form,common_words,dictionary,bookmark,adjective_form,synonyms,similars,relateds,antonyms,essay,essay_attempted,user_essay_reviews,list1,bookmark_attempted,bookmark_questions
 
 admin.site.register(User)
 admin.site.register(article)
@@ -32,6 +32,8 @@ admin.site.register(essay)
 admin.site.register(essay_attempted)
 admin.site.register(user_essay_reviews)
 admin.site.register(list1)
+admin.site.register(bookmark_attempted)
+admin.site.register(bookmark_questions)
 
 
 

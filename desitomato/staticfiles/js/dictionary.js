@@ -59,39 +59,38 @@ $(document).ready(function () {
         var word = { "word":selected_text };
         
         xhr.send(JSON.stringify(word));
-       //alert(JSON.stringify(account));
-       alert(JSON.stringify(word));
+      alert(JSON.stringify(word));
+       //alert(JSON.stringify(word));
         xhr.onreadystatechange = function() {
-          alert(2);
+          //alert(2);
             
              if (xhr.readyState == 4 && xhr.status == 200) {
              	responsereply = xhr.responseText;
-             	if (responsereply!=0) {
-             		$("#word_meaning_ans").text(responsereply);
-                alert(responsereply);
-
-             	}
-             	else  {
-             		$("#word_meaning_ans").text("selected_text");
-
-             	}
-
-
-              }
-
-              else {
-             	//word_meaning_ans
-             	$("#word_meaning_ans").text("selected_text");
+              alert(responsereply);
              	
-              }
-             }
+             	//	$("#word_meaning_ans").text(responsereply);
+              //  alert(responsereply);
+              //responsereply =1122;
+              placePopup(lef, bottom);
+              $("#word_meaning").text(selected_text);
+              $("#word_meaning_ans").text(responsereply);
+              $("#popup").show();
+              $("#tooltip").hide();
+              $("#tooltip_bookmark").hide();
+            }
 
-  placePopup(lef, bottom);
-  $("#word_meaning").text(responsereply);
-  $("#popup").show();
-  $("#tooltip").hide();
-  $("#tooltip_bookmark").hide();
-// alert(selected_text);
+             
+    }
+
+
+  //placePopup(lef, bottom);
+  //responsereply ="i am hhh czczxxchxzchxzc xziuqphqw qwertyuipasd fghjklzxcvbnm asd ff xdi  ihuukkhd dshddugddsd uuhidsidyds sdsidussuudsu i am hhh czczxxchxzchxzc xziuqphqw qwertyuipasd fghjklzxcvbnm asd ff xdi  ihuukkhd dshddugddsd uuhidsidyds sdsidussuudsu i am hhh czczxxchxzchxzc xziuqphqw qwertyuipasd fghjklzxcvbnm asd ff xdi  ihuukkhd dshddugddsd uuhidsidyds sdsidussuudsu";
+  //$("#word_meaning").text(selected_text);
+  //$("#word_meaning_ans").text(responsereply);
+  ///$("#popup").show();
+  //$("#tooltip").hide();
+  //$("#tooltip_bookmark").hide();
+// //alert(selected_text);
  });
 
  document.getElementById("tooltip_bookmark").addEventListener('click', function() {
@@ -105,19 +104,20 @@ $(document).ready(function () {
         var word = { "word":selected_text };
         
         xhr.send(JSON.stringify(word));
-        alert(JSON.stringify(word));
-       //alert(JSON.stringify(account));
+        //alert(JSON.stringify(word));
+       ////alert(JSON.stringify(account));
         xhr.onreadystatechange = function() {
             
              if (xhr.readyState == 4 && xhr.status == 200) {
              	responsereply = xhr.responseText;
-             	if (responsereply!=0) {
+             	if (responsereply!="Bookmarked") {
              		//saved
+					alert("word bookmarked");
 
                                   	}
              	else  {
              		//not saved
-
+					alert("Already bookmarked");
                 	}
 
 

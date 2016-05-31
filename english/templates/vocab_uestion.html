@@ -1,0 +1,96 @@
+{% load static %}
+<html>
+<head>
+<title> Desitomato </title>
+<meta name="keyword" content="News">
+<meta name="keyword" content="learn english with general knowledge">
+<meta charset="UTF-8">
+<meta name="hindu" content="News article">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+ <link rel="stylesheet"  href="{% static 'css/vocab_uestion.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top main_navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      
+	   <a class="navbar-brand" id="user_email" href="http://desitomato.com/start/#">kahyap@gmail.com</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+       <ul class="nav navbar-nav navbar-right">
+		<li><a href="#">News</a></li>
+		<li class="active"><a href="#">Editorial</a></li>
+	
+		<li><a href="#">Vocublary</a></li>
+
+		<li><a href="#">Profile</a></li>  <!-- merge profile and logout -->
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="news_article container-fluid" id="textDescription">
+	
+		<div class="current_question"> 
+			<p class="current_question_text" > </p>
+			<p class="question_id"></p>
+			<form class="current_question_choice">
+				<label class="choice_class">
+					<label class="label_0">
+					<input type="hidden" name="selected_id" id="question_id" value="">
+					</label>
+					<label class="label_1">
+					<input type="radio" name="selected_choice" id="choice1" value="1">
+					</label>
+					<br>
+					<label class="label_2">
+					<input type="radio" name="selected_choice" id="choice2" value="2" > 
+					</label>
+					<br>
+					<label class="label_3">
+					<input type="radio" name="selected_choice" id="choice3" value="3" > 
+					</label>
+					<br>
+					<label class="label_4">
+					<input type="radio" name="selected_choice" id="choice4" value="4"> 
+					</label>
+					<br>
+			 
+				
+				</label>
+			
+			</form>
+		</div> 
+		<div class="question_movable">
+			
+			<div class="submit_question">
+				
+				<a class="btn btn-info btn-lg submit_question_button">
+					 Submit
+				</a>
+				
+			</div>
+			
+			<div class="front_question" id="next_question">
+				<a class="btn btn-info btn-lg front_question_button">
+					<span class="glyphicon glyphicon-chevron-right"> </span> Next Question
+				</a>
+			</div>
+		</div>
+
+</div>
+<script src="{% static 'js/vocab_uestion.js' %}">
+</script>
+<script>
+	lit = {{question|safe}}; 
+</script>
+</body>
+</html>

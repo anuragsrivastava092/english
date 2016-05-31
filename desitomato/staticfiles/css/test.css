@@ -153,14 +153,22 @@ position: relative;
  font-size: 1.5em;
  }
  #popup{
-  background:gray;
+  background:#195070;
  width:400px;
- height:400px;
+ height:200px;
  position:relative;
  border-radius: 2px;
  }
  #word_meaning{
  padding-left:40px;
+ background:#6F616B;
+ 
+ }
+ #word_meaning_ans{
+ padding-left:20px;
+ padding-right: 20px;
+ overflow-x:hidden;
+ background:#9ABBB7;
  
  }
  
