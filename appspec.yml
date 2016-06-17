@@ -1,5 +1,5 @@
 version: 0.0
 os: linux
 files:
-  - source: english/templates/a.html
+  - source: english/templates/b.html
     destination: ../../home/ubuntu/environ/env2/desitomato/english/templates
