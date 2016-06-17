@@ -1,4 +1,4 @@
 os: linux
 files:
-  - source: english/views.py
-    destination: /home/ubuntu/english/views.py
+  - source: english/templates/about.html
+    destination: environ/env2/desitomato/english/templates/about.html
