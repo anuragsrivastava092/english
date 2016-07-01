@@ -5,6 +5,6 @@ files:
     destination: ../../home/ubuntu/environ/env2/bufferbackup/
 hooks:
     BeforeInstall:
-        - location: ../../home/ubuntu/environ/env2/scripts/beforeInstall.bash
+        - location: ../../../../../../home/ubuntu/environ/env2/scripts/beforeInstall.bash
     AfterInstall:
-        - location: ../../home/ubuntu/environ/env2/scripts/afterInstall.bash
+        - location: ../../../../../../home/ubuntu/environ/env2/scripts/afterInstall.bash
